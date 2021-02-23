@@ -1,8 +1,10 @@
 <script>
 	import Outer from './Outer.svelte';
 	import QS from './my_quadstore';
-	let {_quads,query} = QS;
+	let {addQuad,query} = QS;
 	let result = query({});
+
+	$: console.log($result)
 
 	function load_quads()
 	{
@@ -14,16 +16,12 @@
 
 	function addquad()
 	{
-		_quads.update((old) => {
-			let quad = {
+		addQuad({
 				s: "<x>",
 				p: "<x>",
 				o: "<x>",
-				g: "<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzx>"
-			};
-			let now = old.concat(quad);
-			return now;
-		});
+				g: '"' + Date.now().toString() + '"'
+			});
 	}
 
 

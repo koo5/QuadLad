@@ -3,7 +3,7 @@ import {assert} from './utils.js';
 
 export const quadstore = () =>
 {
-	let _writable = writable({});
+	let _writable = writable([]);
 
 	/* let's not support multiple instances yet */
 	var db = new PouchDB('kittens');
@@ -14,53 +14,51 @@ export const quadstore = () =>
 		live: true
 	}).on('change', () =>
 	{
+
 		db.allDocs({include_docs: true, descending: true}, function (err, doc)
 		{
 			if (err) alert(err);
-			console.log("db.allDocs = ");
-			console.log(doc);
-			_writable.set(doc);
+			//console.log("db.allDocs = ");
+			//console.log(doc);
+			let quads = [];
+			doc.rows.forEach(r => quads.push(r.doc));
+			console.log(quads);
+			try
+			{
+				_writable.set(quads);
+			} catch
+				(e)
+			{
+				alert(e)
+			}
 		});
 	});
 
-	let query = (_query) => derived(_writable, $_quad_dict =>
+	let query = (_query) => derived(_writable, quads =>
 	{
-		return filter_quads_by_query(_query, $_quad_dict);
+		return filter_quads_by_query(_query, quads);
 	});
 
 	function addQuad(q)
 	{
+		q._id = q.g;
 		db.put(q, function callback(err)
 		{
 			if (err) alert(err);
 		});
 	}
 
-	return {query};
+	return {query, addQuad};
 }
-
-
-/*
-db.allDocs([options], [callback])
-
-Fetch multiple documents, indexed and sorted by the _id. Deleted documents are only included if options.keys is specified.
-Options
-
-All options default to false unless otherwise specified.
-
-    options.include_docs
-*/
-
 
 function filter_quads_by_query(query, quads)
 {
 	let result = [];
 	var i = 0;
-	Object.keys(quads).forEach(g =>
+	console.log(quads);
+	quads.forEach(q =>
 	{
 		i++;
-		let q = quads[g];
-		assert(g == q.g);
 		if (
 			match(query.s, q.s) &&
 			match(query.p, q.p) &&
@@ -78,3 +76,16 @@ function match(query, node)
 		return true;
 	return (query == node);
 }
+
+/*
+db.allDocs([options], [callback])
+
+Fetch multiple documents, indexed and sorted by the _id. Deleted documents are only included if options.keys is specified.
+Options
+
+All options default to false unless otherwise specified.
+
+    options.include_docs
+*/
+
+
