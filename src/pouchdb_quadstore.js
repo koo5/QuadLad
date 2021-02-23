@@ -1,6 +1,16 @@
 import {derived, writable} from 'svelte/store';
 import {assert} from './utils.js';
 
+/*
+svelte store subscription would fire always. in addition:
+onreset would fire if no more specific event could fire.
+specific events:
+	onadd
+	onremove
+
+quadstore only implements subscribe for now.
+*/
+
 export const quadstore = () =>
 {
 	/* let's not support multiple instances yet */

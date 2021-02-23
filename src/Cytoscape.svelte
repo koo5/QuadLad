@@ -23,6 +23,14 @@
 	$: cyInstance && populate($source_query);
 	function populate(query)
 	{
+		console.log('cyInstance = cytoscape(...');
+
+		cyInstance = cytoscape({
+			container,
+			style: GraphStyles
+		})
+		ecInstance = cyInstance.edgeConnections();
+
 		console.log('$source_query');
 		console.log($source_query);
 		let nodes = {};
@@ -61,17 +69,15 @@
 
 	onMount(() =>
 	{
-		cytoscape.use(edgeConnections);
-		cytoscape.use(automove)
-		cytoscape.use(dagre)
-		cytoscape.use(klay)
-		cytoscape.use(coseBilkent);
-		cyInstance = cytoscape({
-			container,
-			style: GraphStyles
-		})
-		ecInstance = cyInstance.edgeConnections();
+
 	});
+
+	console.log('cytoscape.use(...')
+	cytoscape.use(edgeConnections);
+	cytoscape.use(automove)
+	cytoscape.use(dagre)
+	cytoscape.use(klay)
+	cytoscape.use(coseBilkent);
 
 
 	function auauau()
