@@ -3,18 +3,15 @@ import {assert} from './utils.js';
 
 export const quadstore = () =>
 {
-	let _writable = writable([]);
-
 	/* let's not support multiple instances yet */
 	var db = new PouchDB('kittens');
 	//db.info(console.log);
 
-	db.changes({
-		since: 'now',
-		live: true
-	}).on('change', () =>
-	{
+	// it's writable, but only from here. Users must call addQuad. So this quadstore would be better as an object implementing the readable store api + addQuad.
+	let _writable = writable([]);
 
+	function grab_all_quads()
+	{
 		db.allDocs({include_docs: true, descending: true}, function (err, doc)
 		{
 			if (err) alert(err);
@@ -32,7 +29,17 @@ export const quadstore = () =>
 				alert(e)
 			}
 		});
+	}
+
+	db.changes({
+		since: 'now',
+		live: true
+	}).on('change', () =>
+	{
+		grab_all_quads();
 	});
+
+	grab_all_quads();
 
 	let query = (_query) => derived(_writable, quads =>
 	{

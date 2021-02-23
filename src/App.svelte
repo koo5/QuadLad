@@ -39,6 +39,12 @@
 <Router {routes}/>
 
 <style>
+
+	:global(html) {
+		background: #dddddd;
+		//filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);
+	}
+
 	ul {
 		margin: 0;
 		padding: 0;
