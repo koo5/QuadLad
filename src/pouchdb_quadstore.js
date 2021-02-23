@@ -7,7 +7,7 @@ export const quadstore = () =>
 
 	/* let's not support multiple instances yet */
 	var db = new PouchDB('kittens');
-	db.info(console.log);
+	//db.info(console.log);
 
 	db.changes({
 		since: 'now',
