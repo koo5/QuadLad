@@ -6,5 +6,4 @@
 
 </script>
 
-{quads};
-
+<Cytoscape source_query={quads}/>

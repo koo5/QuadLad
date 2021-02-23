@@ -1,73 +1,62 @@
 <script>
-
+	import Router from 'svelte-spa-router';
+	import Home from './rHome.svelte'
 	import Cytoscape from './rCytoscape.svelte'
-	import {onMount} from 'svelte';
-	var banana=78;
-	//banana = "aaa";
+	//import TextEditor from './rTextEditor.svelte';
+	import Prefixes from './rPrefixes.svelte';
+	import Quads from './rQuads.svelte';
+	import Log from './rLog.svelte';
+	import Falcon from './rFalcon.svelte';
+	import Name from './rName.svelte'
+	import Wild from './rWild.svelte'
+	import NotFound from './rNotFound.svelte'
 
-	let count = 3;
-	onMount(() => {
-	  const interval = setInterval(() => count++, 1000);
-	  return () => {
-		clearInterval(interval);
-	  };
-	});
-  </script>
+	 let routes = {
+		'/': Home,
+		'/cytoscape': Cytoscape,
 
-  <style>
-	:global(body) {
-	  margin: 0;
-	  font-family: Arial, Helvetica, sans-serif;
+		// Using named parameters, with last being optional
+		'/hello/:first/:last?': Name,
+		// Wildcard parameter
+		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
+		'/wild': Wild,
+		'/wild/*': Wild,
+		// Catch-all, must be last
+		'*': NotFound,
 	}
-	.App {
-	  text-align: right;
-	}
-	.App code {
-	  background: #cf02;
-	  padding: 4px 8px;
-	  border-radius: 4px;
-	}
-	.App p {
-	  margin: 0.4rem;
+</script>
+
+<ul>
+	<li><a href="#/">Home</a></li>
+	<li><a href="#/cytoscape">Cytoscape</a></li>
+	<li><a href="#/falcon">Falcon</a></li>
+	<li><a href="#/hello/svelte">Say hi!</a></li>
+	<li><a href="#/wild/card">Wildcard route</a></li>
+</ul>
+<br>
+<hr>
+
+<Router {routes}/>
+
+<style>
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
 	}
 
-	.App-header {
-	  background-color: #f9f6f6;
-	  color: #333;
-	  min-height: 100vh;
-	  display: flex;
-	  flex-direction: column;
-	  align-items: center;
-	  justify-content: center;
-	  font-size: calc(10px + 2vmin);
+	li {
+		float: left;
 	}
-	.App-link {
-	  color: #ff3e00;
-	}
-	.App-logo {
-	  height: 36vmin;
-	  pointer-events: none;
-	  margin-bottom: 3rem;
-	  animation: App-logo-spin infinite 0.6s ease-in-out alternate;
-	}
-	@keyframes App-logo-spin {
-	  from {
-		transform: scale(1);
-	  }
-	  to {
-		transform: scale(1.06);
-	  }
-	}
-  </style>
 
-  <div class="App">
-	<header class="App-header">
-	  <img src="/logo.svg" class="App-logo" alt="logo" />
-	  <p>Edit <code>src/App.svelte</code> and save to reload.</p>
-	  <p>Page has been open for <code>{count}</code> seconds.</p>
-	  <p>
+	li a {
+		text-align: center;
+		padding: 1em;
+	}
 
-	  </p>
-	</header>
-	  <Cytoscape></Cytoscape>
-  </div>
+	li a:hover {
+		text-decoration: underline overline;
+	}
+
+</style>
+

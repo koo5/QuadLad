@@ -16,7 +16,7 @@
     "access": "public"
   },
   "scripts": {
-    "start": "snowpack dev",
+    "start": "snowpack dev --polyfill-node",
     "build": "snowpack build",
     "test": "web-test-runner \"src/**/*.test.ts\""
   },
