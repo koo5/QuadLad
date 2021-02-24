@@ -1,8 +1,8 @@
 <script>
 	import QuadsListItem from './QuadsListItem.svelte';
-	import my_quadstore from './my_quadstore.js';
-	import {save_myrdf_quad_query_as_file_download} from './myrdf_io.js';
-	let quads = my_quadstore.query({});
+	import {query} from './my_quadstore.js';
+
+	let quads = query({});
 </script>
 <div>
 	{#if $quads.length != 0}
@@ -10,7 +10,7 @@
 	{:else}
 		store is empty.
 	{/if}
-	<button on:click={()=>save_myrdf_quad_query_as_file_download($quads)}>save as TriG</button>
+
 	<ul>
 		add:
 		{#each $quads as item}
@@ -20,7 +20,7 @@
 </div>
 <style>
 	ul {
-		margin: 0px;
+		margin: 0.5ex 0;
 		padding: 0px;
 	}
 </style>

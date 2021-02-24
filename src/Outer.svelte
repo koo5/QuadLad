@@ -1,7 +1,6 @@
 <script>
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
-	import QS from './my_quadstore';
-	let {_quads, query} = QS;
+	import {query} from './my_quadstore';
 
 	export let uri;
 	/*let presentation_selection_strategy = query_one(

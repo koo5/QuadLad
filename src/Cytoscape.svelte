@@ -1,15 +1,32 @@
 <script>
 
+	import {get, writable} from 'svelte/store';
 	import {assert} from './utils.js';
 	import {Button, ButtonToolbar} from 'sveltestrap';
 	import {onMount, setContext} from 'svelte'
 	import cytoscape from 'cytoscape'
 	import edgeConnections from 'cytoscape-edge-connections';
 	import GraphStyles from './CytoscapeGraphStyles.js'
+
+	import cola from 'cytoscape-cola';
 	import dagre from 'cytoscape-dagre'
 	import klay from 'cytoscape-klay';
 	import coseBilkent from 'cytoscape-cose-bilkent';
+
 	import automove from 'cytoscape-automove';
+
+
+	if (!cytoscape.inited)
+	{
+		cytoscape.inited = true;
+		console.log('cytoscape.use(...')
+		cytoscape.use(edgeConnections);
+		cytoscape.use(automove)
+		cytoscape.use(dagre)
+		cytoscape.use(klay)
+		cytoscape.use(coseBilkent);
+		cytoscape.use(cola);
+	}
 
 
 	export let source_query;
@@ -19,15 +36,53 @@
 	let cyInstance = null
 	let ecInstance = null;
 
+	let default_layout =
+		{
+			name: 'grid',
+			fit: true, // whether to fit the viewport to the graph
+			padding: 30, // padding used on fit
+			boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+			avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+			avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
+			nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+			spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+			condense: false, // uses all available space on false, uses minimal space on true
+			rows: undefined, // force num of rows in the grid
+			cols: undefined, // force num of columns in the grid
+			position: function (node)
+			{
+			}, // returns { row, col } for element
+			sort: undefined, // a sorting function to order the nodes; e.g. function(a, b){ return a.data('weight') - b.data('weight') }
+			animate: false, // whether to transition the node positions
+			animationDuration: 500, // duration of animation in ms if enabled
+			animationEasing: undefined, // easing of animation if enabled
+			animateFilter: function (node, i)
+			{
+				return true;
+			}, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+			ready: undefined, // callback on layoutready
+			stop: undefined, // callback on layoutstop
+			transform: function (node, position)
+			{
+				return position;
+			} // transform a given node position. Useful for changing flow direction in discrete layouts
+		};
 
+	let layout = writable(default_layout);
 	$: cyInstance && populate($source_query);
+	onMount(() =>
+	{
+		populate(get(source_query))
+	});
+
 	function populate(query)
 	{
 		console.log('cyInstance = cytoscape(...');
 
 		cyInstance = cytoscape({
 			container,
-			style: GraphStyles
+			style: GraphStyles,
+			layout: $layout,
 		})
 		ecInstance = cyInstance.edgeConnections();
 
@@ -46,7 +101,7 @@
 					group: 'nodes',
 					classes: 'node',
 					id: str,
-					data: {id:str, label: str}
+					data: {id: str, label: str}
 				}
 			});
 			edges.push({
@@ -64,20 +119,8 @@
 		console.log('edges')
 		console.log(edges)
 		ecInstance.addEdges(edges);
+		lalala();
 	}
-
-
-	onMount(() =>
-	{
-
-	});
-
-	console.log('cytoscape.use(...')
-	cytoscape.use(edgeConnections);
-	cytoscape.use(automove)
-	cytoscape.use(dagre)
-	cytoscape.use(klay)
-	cytoscape.use(coseBilkent);
 
 
 	function auauau()
@@ -154,10 +197,16 @@
 		rule.enable();
 	}
 
+	function set_layout(l)
+	{
+		layout.set(l);
+		cyInstance.makeLayout(l).run();
+	}
+
 	function lalala()
 	{
-		cyInstance
-			.makeLayout({
+		set_layout(
+			{
 				name: 'dagre',
 				rankDir: 'TB',
 
@@ -171,15 +220,13 @@
 				*
 				* (they move when you move a node by hand)
 				* */
-			})
-			.run()
-
+			});
 	}
 
 	function lalala2()
 	{
-		cyInstance
-			.makeLayout({
+		set_layout(
+			{
 				name: 'cose-bilkent',
 				ready: function ()
 				{
@@ -233,42 +280,67 @@
 				gravityRange: 3.8,
 				// Initial cooling factor for incremental layout
 				initialEnergyOnIncremental: 0.5
-			}).run();
+			});
 	}
 
 </script>
 
-<div class="container">
-	<div class="row">
-		<div class="col-xs-offset 1 col-xs-11 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
-			<div class="btn-toolbar" role="toolbar">
-				<div class="btn-group btn-group-justified" role="group">
-					<div class="btn-group" role="group">
-						<button on:click='{() => populate($source_query)}'>populate</button>
-					</div>
-					<div class="btn-group" role="group">
-						<button on:click='{() => lalala()}'>lay out</button>
-					</div>
-					<div class="btn-group" role="group">
-						<button on:click='{() => lalala2()}'>lay out2</button>
-					</div>
-					<div class="btn-group" role="group">
-						<button on:click='{() => auauau()}'>enable auto</button>
-					</div>
-				</div>
-			</div>
-		</div>
+
+<div class="box">
+	<div class="row header">
+		cy:
+		<button on:click='{() => populate($source_query)}'>populate</button>
+		<button on:click='{() => lalala()}'>lay out</button>
+		<button on:click='{() => lalala2()}'>lay out2</button>
+		<button on:click='{() => auauau()}'>enable auto</button>
 	</div>
-	<div class="row">
+	<div class="row content">
 		<div class="graph" bind:this={container}/>
 	</div>
+	<div class="row footer"><small>footsies</small></div>
 </div>
+
 
 <style>
 
-	.graph {
-		background: #ff00ff;
-		//filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);
-	}
+    .graph {
+        background: #ffddff;
+        height: 100%;
+        /*filter: hue-rotate(0 deg) contrast(1) invert(0) saturate(2);*/
+    }
+
+
+
+    .box {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+    }
+
+    .box .row {
+		padding:0.2ex;
+    }
+
+    .box .row.header {
+		border-bottom: 1px dashed orange;
+        flex: 0 1 auto;
+        /* The above is shorthand for:
+		flex-grow: 0,
+		flex-shrink: 1,
+		flex-basis: auto
+		*/
+    }
+
+    .box .row.content {
+		border-bottom: 1px dashed orange;
+        flex: 1 1 auto;
+    }
+
+    .box .row.footer {
+        flex: 0 1;
+		padding: 0;
+
+    }
+
 
 </style>

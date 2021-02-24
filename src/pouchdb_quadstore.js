@@ -1,4 +1,4 @@
-import {derived, writable} from 'svelte/store';
+import {get, derived, writable} from 'svelte/store';
 import {assert} from './utils.js';
 
 /*
@@ -19,6 +19,7 @@ export const quadstore = () =>
 
 	// it's writable, but only from here. Users must call addQuad. So this quadstore would be better as an object implementing the readable store api + addQuad.
 	let _writable = writable([]);
+	let busy = writable(true);
 
 	function grab_all_quads()
 	{
@@ -29,7 +30,7 @@ export const quadstore = () =>
 			//console.log(doc);
 			let quads = [];
 			doc.rows.forEach(r => quads.push(r.doc));
-			console.log(quads);
+			//console.log(quads);
 			try
 			{
 				_writable.set(quads);
@@ -38,6 +39,7 @@ export const quadstore = () =>
 			{
 				alert(e)
 			}
+			busy.set(false);
 		});
 	}
 
@@ -65,7 +67,14 @@ export const quadstore = () =>
 		});
 	}
 
-	return {query, addQuad};
+	async function clear()
+	{
+		busy.set(true);
+		await get(_writable).forEach(async (x) => {await db.remove(x)});
+	}
+
+
+	return {query, addQuad, clear,busy};
 }
 
 function filter_quads_by_query(query, quads)

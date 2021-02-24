@@ -18,11 +18,13 @@
 
 	function handleRemove(e)
 	{
+		// todo call quadstore.remove
 		console.log(e);
 	}
 
 	function changeQuad()
 	{
+		// todo call quadstore.update
 		// this would be wrong
 		quad.s = quad.s + 'XXX';
 	}

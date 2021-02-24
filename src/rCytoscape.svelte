@@ -1,9 +1,8 @@
 <script>
 
 	import Cytoscape from './Cytoscape.svelte'
-	import my_quadstore from './my_quadstore.js';
-	let quads = my_quadstore.query({});
+	import {kb} from './my_quadstore.js';
 
 </script>
 
-<Cytoscape source_query={quads}/>
+<Cytoscape source_query={kb}/>

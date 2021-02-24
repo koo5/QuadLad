@@ -23,6 +23,7 @@
   "dependencies": {
     "cytoscape": "^3.18.0",
     "cytoscape-automove": "^1.10.2",
+    "cytoscape-cola": "^2.4.0",
     "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-dagre": "^2.2.2",
     "cytoscape-edge-connections": "^0.4.2",
