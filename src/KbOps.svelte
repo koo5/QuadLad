@@ -1,7 +1,7 @@
 <script>
   	import { Button } from 'sveltestrap';
 	import {addQuad,query,kb,clear,busy} from './my_quadstore';
-import {save_myrdf_quad_query_as_file_download} from './myrdf_io.js';
+	import {save_myrdf_quad_query_as_file_download} from './myrdf_io.js';
 
 	async function clear0()
 	{
@@ -13,9 +13,7 @@ import {save_myrdf_quad_query_as_file_download} from './myrdf_io.js';
 
 	}
 
-
-
-	function addDummyquad()
+	function addDummyQuad()
 	{
 		addQuad({
 				s: "<x>",
@@ -28,8 +26,8 @@ import {save_myrdf_quad_query_as_file_download} from './myrdf_io.js';
 
 </script>
 kb:
-<Button disabled={$busy}  on:click='{() => clear0()}'>Clear</Button>
+<Button disabled={$busy} on:click='{() => clear0()}'>Clear</Button>
 <button on:click='{() => load_quads()}'>Load</button>
-<button on:click='{() => addDummyquad()}'>Add random</button>
+<button on:click='{() => addDummyQuad()}'>Add random</button>
 <button on:click={()=>save_myrdf_quad_query_as_file_download($kb)}>Save as TriG</button>
 
