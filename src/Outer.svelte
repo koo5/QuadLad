@@ -3,7 +3,7 @@
 	import {query} from './my_quadstore';
 
 	export let uri;
-	/*let presentation_selection_strategy = query_one(
+	let presentation_selection_strategy = query_one(
 		{s: uri, p: "rkef:presentation_selection_strategy"},
 		2,
 @		"rkef:automatic");*/

@@ -1,0 +1,8 @@
+@prefix mrkev: <https://rdf.lodgeit.net.au/mrkev#>.
+@prefix : <http://rdf/kb>.
+
+<http://rdf/dataset1> a mrkev:dataset;
+    mrkev:root_uri :dataset1_root.
+
+:dataset1_root a mrkev:plain_text;
+    mrkev:value "xxxxxxxxxx\n\tyyyyyyyy\n".
