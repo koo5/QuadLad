@@ -35,11 +35,27 @@ function n3_quad_to_my_quad(i)
 
 }
 
-
-
-export async function fetch_dataset_from_uri()
+function insert_n3_quad_into_db(q)
 {
-	const url = "dataset1.n3";
+	let q2 = {
+		s:q
+	}
+/*
+graph: DefaultGraph {id: ""}
+id: ""
+object: NamedNode {id: "https://rdf.lodgeit.net.au/mrkev#dataset"}
+predicate: NamedNode {id: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
+subject: NamedNode
+id: "http://rdf/dataset1"
+termType: (...)
+value: (...)
+__proto__: Term
+termType: "Quad"
+ */
+}
+
+export async function load_n3_from_url(url)
+{
 	let response = await fetch(url);
 	if (!response.ok) throw Error(response.statusText);
 	let text = await response.text();

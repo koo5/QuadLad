@@ -4,23 +4,27 @@
 
 	let quads = query({});
 </script>
-<div>
+
 	{#if $quads.length != 0}
 		store contains {$quads.length} quads.
 	{:else}
 		store is empty.
 	{/if}
 
-	<ul>
-		add:
+	<table>
+		<tr>
+			<th>idx</th>
+			<th></th>
+			<th>subject</th>
+			<th>predicate</th>
+			<th>object</th>
+			<th>graph</th>
+			<th></th>
+		</tr>
 		{#each $quads as item}
+			<tr>
 			<QuadsListItem quad={item}/>
+			</tr>
 		{/each}
-	</ul>
-</div>
-<style>
-	ul {
-		margin: 0.5ex 0;
-		padding: 0px;
-	}
-</style>
+	</table>
+

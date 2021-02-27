@@ -6,7 +6,7 @@
 	/*let presentation_selection_strategy = query_one(
 		{s: uri, p: "rkef:presentation_selection_strategy"},
 		2,
-		"rkef:automatic");*/
+@		"rkef:automatic");*/
 	$: presentation = (() =>
 	{
 		//if (presentation_selection_strategy == "rkef:automatic")

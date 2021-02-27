@@ -15,7 +15,6 @@
 
 
 
-
 	export let node;
 	export let ignore_empty = false
 
@@ -35,7 +34,10 @@
 		{
 			errors = null;
 			if (node !== r.value)
+			{
 				node = r.value;
+				quadstore.update_quad(q);
+			}
 		}
 	}
 
