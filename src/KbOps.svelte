@@ -1,6 +1,6 @@
 <script>
   	import { Button } from 'sveltestrap';
-	import {addQuad,query,kb,clear,busy} from './my_quadstore';
+	import {addQuad,raw_query,kb,clear,busy} from './my_quadstore';
 	import * as rdfio from './myrdf_io.js';
 
 	async function clear0()

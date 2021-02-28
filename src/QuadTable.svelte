@@ -1,8 +1,8 @@
 <script>
 	import QuadsListItem from './QuadsListItem.svelte';
-	import {query} from './my_quadstore.js';
+	import {raw_query} from './my_quadstore.js';
 
-	let quads = query({});
+	let quads = raw_query({});
 </script>
 
 	{#if $quads.length != 0}

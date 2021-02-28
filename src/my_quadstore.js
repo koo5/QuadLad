@@ -1,9 +1,9 @@
 /* it's probably about time to switch it to typescript..*/
 import {quadstore} from './pouchdb_quadstore';
-let {addQuad,query,clear,busy} = quadstore();
-let kb = query({});
+let {addQuad,raw_query,clear,busy} = quadstore();
+let kb = raw_query({});
 export {
-	addQuad,query,clear,busy,
+	addQuad,raw_query,clear,busy,
 	kb
 };
 

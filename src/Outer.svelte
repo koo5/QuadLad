@@ -1,12 +1,9 @@
 <script>
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
-	import {query} from './my_quadstore';
+	import {raw_query} from './my_quadstore';
 
 	export let uri;
-	let presentation_selection_strategy = query_one(
-		{s: uri, p: "rkef:presentation_selection_strategy"},
-		2,
-@		"rkef:automatic");*/
+
 	$: presentation = (() =>
 	{
 		//if (presentation_selection_strategy == "rkef:automatic")
@@ -14,10 +11,12 @@
 		return "rkef:table_of_properties";
 	})();
 
-	let all_quads = query({s: uri});
+	let all_quads = raw_query({s: uri});
 	$: unhandled_quads = [...$all_quads];
 	$: label = uri;
 
+
+	let presentation_selection_strategy;
 	/*
 		<PresentationSelector uri/>
 	 */

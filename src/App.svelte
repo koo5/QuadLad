@@ -19,15 +19,14 @@
 		'/cytoscape': Cytoscape,
 		'/raw': Raw,
 		'/quad_table': QuadTable,
-		// Using named parameters, with last being optional
-		'/hello/:first/:last?': Name,
-		// Wildcard parameter
-		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
-		'/wild': Wild,
-		'/wild/*': Wild,
 		'/about': About,
 
 
+		// Using named parameters, with last being optional
+		'/hello/:first/:last?': Name,
+		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
+		'/wild': Wild,
+		'/wild/*': Wild,
 		// Catch-all, must be last
 		'*': NotFound,
 	}
@@ -41,8 +40,6 @@
 			<li><a href="#/quad_table">QuadTable</a></li>
 			<li><a href="#/cytoscape">Cytoscape</a></li>
 			<li><a href="#/falcon">Falcon</a></li>
-			<li><a href="#/hello/svelte">Say hi!</a></li>
-			<li><a href="#/wild/card">Wildcard route</a></li>
 			<li><a href="#/about">About</a></li>
 		</ul>
 	</div>

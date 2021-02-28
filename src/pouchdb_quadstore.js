@@ -1,7 +1,11 @@
-import {get, derived, writable} from 'svelte/store';
-import {assert} from './utils.js';
-
 /*
+The query functions functions return svelte stores, that is, objects that you can subscribe() to and be notified of changes. See https://svelte.dev/tutorial/readable-stores
+
+These svelte stores will, in turn, be notified when the underlying quadstore changes. In future, we want a whole datalog or prolog engine underneath, instead o
+f just a dumb quadstore. And, ideally, one whose queries will be persistent and reactive wrt it's underlying kb changes, propagating changes up the proof tree
+with minimal overhead. At that point, this architecture will make more sense. Right now, when the underlying quadstore changes, all the queries just redo all t
+he work.
+
 svelte store subscription would fire always. in addition:
 onreset would fire if no more specific event could fire.
 specific events:
@@ -9,7 +13,12 @@ specific events:
 	onremove
 
 quadstore only implements subscribe for now.
+
 */
+
+
+import {get, derived, writable} from 'svelte/store';
+import {assert} from './utils.js';
 
 export const quadstore = () =>
 {
@@ -29,8 +38,13 @@ export const quadstore = () =>
 		{
 			if (err) alert(err);
 			//console.log("db.allDocs = ");
-			//console.log(doc);
-			let quads = [];
+			console.log(doc);
+			let quads = [];//todo let's switch this back to an object
+			/*
+			db.allDocs([options], [callback])
+			Fetch multiple documents, indexed and sorted by the _id. Deleted documents are only included if options.keys is specified.
+			^ idk what indexed means here.
+			*/
 			doc.rows.forEach(r => quads.push(r.doc));
 			//console.log(quads);
 			try
@@ -55,7 +69,7 @@ export const quadstore = () =>
 
 	grab_all_quads();
 
-	let query = (_query) => derived(_writable, quads =>
+	let raw_query = (_query) => derived(_writable, quads =>
 	{
 		return filter_quads_by_query(_query, quads);
 	});
@@ -73,18 +87,25 @@ export const quadstore = () =>
 	async function clear()
 	{
 		busy.set(true);
-		await get(_writable).forEach(async (x) => {await db.remove(x)});
+		await get(_writable).forEach(async (x) =>
+		{
+			await db.remove(x)
+		});
 	}
 
+	function query2()
+	{
 
-	return {query, addQuad, clear,busy};
+	}
+
+	return {raw_query, query2, addQuad, clear, busy};
 }
 
 function filter_quads_by_query(query, quads)
 {
 	let result = [];
 	var i = 0;
-	console.log(quads);
+	//console.log(quads);
 	quads.forEach(q =>
 	{
 		i++;
@@ -106,18 +127,54 @@ function match(query, node)
 	return (query == node);
 }
 
+
 /*
-db.allDocs([options], [callback])
-
-Fetch multiple documents, indexed and sorted by the _id. Deleted documents are only included if options.keys is specified.
-Options
-
-All options default to false unless otherwise specified.
-
-    options.include_docs
+What follows is the first layer of convenience, wrapping the purely non-deterministic-ish raw_query() interface.
 */
 
-
+function xxx()
+{
+	const query_option_descriptions = {
+		determinancy_check: {
+			description: `
+			An error is indicated if this is violated.
+			Determinancy check happens before default_result logic, so, it acts on the actual results, not on results amended with defaults.
+			
+			`,
+			options: {
+				'!': 'one solution',
+				'?': 'zero or one solution',
+				'+': 'one or more solutions',
+				'*': 'any number of solutions'
+			}
+		},
+		/*result_selector: {
+			i guess not needed, determinancy_check already fully specifies if the result should be a single quad or a list..
+		}*/
+		result_inspector: {
+			description: 'should the whole quad be returned, or just some node?',
+			default: 'whole',
+			options: {
+				whole: "whole quad",
+				/* approximating a prolog functor here lol:*/
+				/*just: {type: 'variable', bound:false}}:'a particular node'
+				for example:
+				{just:'s'}: 'subject',
+				{just:'p'}: 'predicate',
+				{just:'o'}: 'object'
+				*/
+			}
+		},
+		default_result: {
+			description: "in case of '!', what node to return if there was no result",
+			options:
+				{
+					'no default': 'no default',
+					default: 'string'
+				}
+		}
+	}
+}
 
 
 
@@ -127,18 +184,6 @@ All options default to false unless otherwise specified.
 
 
 /*
-These functions return svelte stores, that is, objects that you can subscribe() to and be notified of changes. See https://svelte.dev/tutorial/readable-stores
-
-These svelte stores will, in turn, be notified when the underlying quadstore changes. In future, we want a whole datalog or prolog engine underneath, instead o
-f just a dumb quadstore. And, ideally, one whose queries will be persistent and reactive wrt it's underlying kb changes, propagating changes up the proof tree
-with minimal overhead. At that point, this architecture will make more sense. Right now, when the underlying quadstore changes, all the queries just redo all t
-he work.
-*/
-
-
-/*
-What follows is the first layer of convenience, wrapping the purely non-deterministic-ish query() interface.
-
 export function query_first
     // this is querying one or more solutions, then picking the first one
     query("+doc(
@@ -158,7 +203,6 @@ export function reason_one(
 ..
 }
 */
-
 
 /*
 rdf node format/representation:
