@@ -21,6 +21,6 @@
 {#if presentation_selection_strategy_r.error}
 	ERROR: {presentation_selection_strategy_r.error}
 {:else}
-	
+
 
 {/if}

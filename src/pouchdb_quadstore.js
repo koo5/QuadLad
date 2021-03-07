@@ -89,7 +89,14 @@ export const quadstore = () =>
 		busy.set(true);
 		await get(_writable).forEach(async (x) =>
 		{
-			await db.remove(x)
+			try
+			{
+				await db.remove(x)
+			}
+			catch (e)
+			{
+				alert(e);
+			}
 		});
 	}
 
