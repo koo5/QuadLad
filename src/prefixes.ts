@@ -1,5 +1,7 @@
 import {PrefixDeclaration,prefix_store} from './prefix_store';
 import {get} from "svelte/store";
+//import {log} from './log_store.js';
+
 
 export function prefixes_as_dict()
 {

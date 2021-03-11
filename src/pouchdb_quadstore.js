@@ -1,24 +1,9 @@
-/*
-The query functions functions return svelte stores, that is, objects that you can subscribe() to and be notified of changes. See https://svelte.dev/tutorial/readable-stores
-
-These svelte stores will, in turn, be notified when the underlying quadstore changes. In future, we want a whole datalog or prolog engine underneath, instead o
-f just a dumb quadstore. And, ideally, one whose queries will be persistent and reactive wrt it's underlying kb changes, propagating changes up the proof tree
-with minimal overhead. At that point, this architecture will make more sense. Right now, when the underlying quadstore changes, all the queries just redo all t
-he work.
-
-svelte store subscription would fire always. in addition:
-onreset would fire if no more specific event could fire.
-specific events:
-	onadd
-	onremove
-
-quadstore only implements subscribe for now.
-
-*/
-
-
 import {get, derived, writable} from 'svelte/store';
 import {assert} from './utils.js';
+import {log} from './log_store.js';
+import {bulkAddQuads} from './my_quadstore';
+import _, { map } from 'underscore';
+
 
 export const quadstore = () =>
 {
@@ -26,13 +11,14 @@ export const quadstore = () =>
 
 	/* let's not support multiple instances yet */
 	var db = new PouchDB('kittens');
-	//db.info(console.log);
+	//db.info(log);
 
 	// it's writable, but only from here. Users must call addQuad. So this quadstore would be better as an object implementing the readable store api + addQuad.
 	// oops, this really should be a dict not a list
 	let _writable = writable([]);
 
 	let busy = writable(true);
+	let queries = writable([]);
 
 	function grab_all_quads()
 	{
@@ -40,11 +26,14 @@ export const quadstore = () =>
 			clearTimeout(my_timeout);
 		my_timeout = setTimeout(() =>
 		{
+			let query_tracker = {"ts": Date.now().toString()};
+			queries.update(queries => queries.concat(query_tracker));
 			db.allDocs({include_docs: true, descending: true}, function (err, doc)
 			{
+				queries.update(queries => _.without(queries, query_tracker));
 				if (err) alert(err);
-				//console.log("db.allDocs = ");
-				//console.log(doc);
+				//log("db.allDocs = ");
+				//log(doc);
 				let quads = [];//todo let's switch this back to an object
 				/*
 				db.allDocs([options], [callback])
@@ -52,10 +41,10 @@ export const quadstore = () =>
 				^ idk what indexed means here.
 				*/
 				doc.rows.forEach(r => quads.push(r.doc));
-				//console.log(quads);
+				//log(quads);
 				try
 				{
-					console.log('_writable.set(quads);');
+					log('_writable.set(quads);');
 					_writable.set(quads);
 				} catch (e)
 				{
@@ -63,7 +52,7 @@ export const quadstore = () =>
 				}
 				busy.set(false);
 			});
-		}, 300);
+		}, 500);
 	}
 
 	db.changes({
@@ -92,15 +81,27 @@ export const quadstore = () =>
 		});
 	}
 
+	let buffer = [];
+	let my_timeout2;
+
+	function flush_buffer()
+	{
+		log('flush_buffer() o-> bulkAddQuads');
+		bulkAddQuads(buffer);
+		buffer = [];
+	}
+
+	function addQuads(q)
+	{
+		buffer = buffer.concat(q);
+		if (my_timeout2)
+			clearTimeout(my_timeout2);
+		my_timeout2 = setTimeout(() => flush_buffer(), 300);
+	}
+
 	function addQuad(q)
 	{
-		//q._id = q.g;
-		//db.put(q, function callback(err)
-		console.log('addQuad');
-		db.post(q, function callback(err)
-		{
-			if (err) alert(err);
-		});
+		addQuads([q]);
 	}
 
 	async function clear()
@@ -136,33 +137,31 @@ export const quadstore = () =>
 
 	}
 
-	return {raw_query, query2, addQuad, bulkAddQuads, clear, busy};
+	return {queries, raw_query, query2, addQuad, addQuads, bulkAddQuads, clear, busy};
 }
 
 function filter_quads_by_query(query, quads)
 {
 	let result = [];
 	var i = 0;
-	//console.log(quads);
-	quads.forEach(q =>
+	//log(quads);
+	quads.forEach(quad =>
 	{
 		i++;
 		if (
-			match(query.s, q.s) &&
-			match(query.p, q.p) &&
-			match(query.o, q.o) &&
-			match(query.g, q.g)
+			match(query.s, quad.s) &&
+			match(query.p, quad.p) &&
+			match(query.o, quad.o) &&
+			match(query.g, quad.g)
 		)
-			result.push({...q, idx: i});
+			result.push({...quad, idx: i});
 	});
 	return result;
 }
 
 function match(query, node)
 {
-	if (query == undefined || query == "?")
-		return true;
-	return (query == node);
+	return (query == undefined || query == "?" || query == node);
 }
 
 
@@ -245,3 +244,23 @@ full uris are signified by a string like this: "<http://blablabla>".
 rdf literals are represented by objects .. maybe let's use N3.js classes?
 
 */
+
+
+/*
+The query functions functions return svelte stores, that is, objects that you can subscribe() to and be notified of changes. See https://svelte.dev/tutorial/readable-stores
+
+These svelte stores will, in turn, be notified when the underlying quadstore changes. In future, we want a whole datalog or prolog engine underneath, instead o
+f just a dumb quadstore. And, ideally, one whose queries will be persistent and reactive wrt it's underlying kb changes, propagating changes up the proof tree
+with minimal overhead. At that point, this architecture will make more sense. Right now, when the underlying quadstore changes, all the queries just redo all t
+he work.
+
+svelte store subscription would fire always. in addition:
+onreset would fire if no more specific event could fire.
+specific events:
+	onadd
+	onremove
+
+quadstore only implements subscribe for now.
+
+*/
+

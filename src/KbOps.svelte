@@ -1,9 +1,11 @@
 <script>
+
+	import {log} from './log_store.js';
   	import { Button } from 'sveltestrap';
-	import {addQuad,raw_query,kb,clear,busy} from './my_quadstore';
+	import {queries,addQuad,raw_query,kb,clear,busy} from './my_quadstore';
 	import * as rdfio from './myrdf_io.js';
 
-	$: console.log('kb has ' + $kb.length + ' items');
+	$: log('kb has ' + $kb.length + ' items');
 
 	async function clear0()
 	{
@@ -28,7 +30,7 @@
 	async function load_demo_dataset()
 	{
 		const n3 = await rdfio.load_n3_from_url("dataset1.n3");
-		console.log(n3);
+		log(n3);
 	}
 
 </script>
@@ -38,4 +40,7 @@ kb:
 <button on:click='{() => addDummyQuad()}'>Add random</button>
 <button on:click={()=>rdfio.save_myrdf_quad_query_as_file_download($kb)}>Save as TriG</button>
 <button on:click={()=>load_demo_dataset()}>Load demo N3</button>
+<br>
 | {$kb.length} items |
+queries:{JSON.stringify($queries, null, '')} |
+

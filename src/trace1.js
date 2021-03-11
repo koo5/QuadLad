@@ -3,7 +3,7 @@ f( {
   "type":"node",
   "@id":"node1",
   "args": ["arg1" ],
-  "parent":"none",
+  "parent":"<rooot>",
   "type":"builtins#root"
 });
 f( {

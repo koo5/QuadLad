@@ -1,4 +1,5 @@
 <script>
+	import {log} from './log_store.js';
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 	import {raw_query} from './my_quadstore';
 
@@ -11,8 +12,14 @@
 		return "rkef:table_of_properties";
 	})();
 
-	let all_quads = raw_query({s: uri});
-	$: unhandled_quads = [...$all_quads];
+	let q1 = raw_query({s: uri});
+	let q2 = raw_query({o: uri});
+	$: console.log($q1);
+	$: console.log($q2);
+	$: v1 = $q1;
+	$: v2 = $q2;
+	$: all_quads = v1.concat(v2);
+	$: unhandled_quads = all_quads;
 	$: label = uri;
 
 
@@ -24,7 +31,7 @@
 </script>
 <div>
 
-	{#if $all_quads.length != 0}
+	{#if all_quads.length != 0}
 
 		<!-- my domain specific views go here for now -->
 		{#if presentation == "robust:result"}

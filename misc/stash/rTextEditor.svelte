@@ -27,8 +27,8 @@
 		if (quads.getQuads(root, RDF + "type", URI_PLAINTEXT).length != 0)
 		{
 			var value = quads.getQuads(root, M + 'value', null)[0].object.value;
-			/*console.log("adding value:");
-			console.log(value);*/
+			/*log("adding value:");
+			log(value);*/
 			editor.innerText += value;
 		}
 		/*

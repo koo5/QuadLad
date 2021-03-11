@@ -32,7 +32,7 @@
 	function handleRemove(e)
 	{
 		// todo call quadstore.remove
-		console.log(e);
+		log(e);
 	}
 
 	function changeQuad()

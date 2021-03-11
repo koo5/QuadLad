@@ -1,32 +1,9 @@
-import {bulkAddQuads} from './my_quadstore.js';
-
-let buffer = [];
-let my_timeout;
-
-function flush_buffer()
-{
-	if (buffer.length != 0)
-	{
-		console.log('flush_buffer() o-> bulkAddQuads');
-		bulkAddQuads(buffer);
-		buffer = [];
-	}
-}
+import {addQuads} from './my_quadstore.js';
+import {log} from './log_store.js';
 
 export function f(data)
 {
-
-
-	if (my_timeout)
-		clearTimeout(my_timeout);
-
-	my_timeout = setTimeout(() =>
-	{
-		flush_buffer();
-	}, 300);
-
-
-
+	const buffer = [];
 	let id = "<"+data['@id']+">";
 	if (data['parent'])
 	{
@@ -64,4 +41,5 @@ export function f(data)
 			g: '<idk#' + Date.now().toString() + '>'
 		});
 	}
+	addQuads(buffer);
 }

@@ -1,4 +1,5 @@
 <script>
+	import {log} from './log_store.js';
 	import {query2} from './my_quadstore';
 
 	export let resource_uri;

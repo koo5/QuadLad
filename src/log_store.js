@@ -4,6 +4,7 @@ export const log_store = writable([]);
 
 export function log(x)
 {
-	//console.log(x);
+	//x = Date.now().toLocaleString() + ': ' + x;
+	console.log(x);
 	log_store.update(old_state => [x].concat(old_state));
 }

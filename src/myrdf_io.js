@@ -1,4 +1,14 @@
 import * as N3 from 'n3';
+//import {log} from './log_store.js';
+
+export function stringify_my_node(x)
+	{
+		if (typeof x === 'string' || x instanceof String)
+			return x;
+		else if (Array.isArray(x))
+			return '[' + x.join(', ') + ']'
+		return '?!?!?: ' + JSON.stringify(x, null, '');
+	}
 
 
 export function try_parse_rdf_node(x)
@@ -70,12 +80,12 @@ async function load_dataset_from_text(n3_text)
 		(error, quad, prefixes) =>
 		{
 			if (error)
-				console.log(error);
+				log(error);
 			if (quad)
 				kb.push(quad);
 		});
-	/*console.log("n3 text loaded:");
-	console.log(kb);*/
+	/*log("n3 text loaded:");
+	log(kb);*/
 	return kb;
 }
 
@@ -84,7 +94,7 @@ export function save_myrdf_quad_query_as_file_download($query)
 {
 	const writer = new N3.Writer({ prefixes: prefixes_as_dict() });
 	const q = $query;
-	const cb = (x) => {if (x)console.log(x)}
+	const cb = (x) => {if (x)log(x)}
 	for (var i = 0; i < q.length; i++)
 		writer.addQuad(my_quad_to_n3_quad(q[i]),cb);
 	writer.end((error, result) => {

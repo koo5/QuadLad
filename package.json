@@ -29,13 +29,17 @@
     "cytoscape-edge-connections": "^0.4.2",
     "cytoscape-klay": "^3.1.4",
     "file-saver": "^2.0.5",
+    "futil": "^1.67.3",
     "jsonld": "^4.0.1",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "n3": "^1.8.0",
     "svelte": "^3.24.0",
     "svelte-popover": "^2.0.8",
     "svelte-spa-router": "^3.1.0",
     "svelte-tooltip": "^1.2.0",
-    "sveltestrap": "^3.13.0"
+    "sveltestrap": "^3.13.0",
+    "underscore": "^1.12.0"
   },
   "devDependencies": {
     "@snowpack/plugin-dotenv": "^2.0.5",

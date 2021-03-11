@@ -1,4 +1,5 @@
 import {writable} from 'svelte/store';
+//import {log} from './log_store.js';
 
 export class PrefixDeclaration
 {

@@ -1,9 +1,12 @@
 <script>
 
+	import {log} from './log_store.js';
 	import {get, writable} from 'svelte/store';
 	import {assert} from './utils.js';
 	import {Button, ButtonToolbar} from 'sveltestrap';
 	import {onMount, setContext} from 'svelte'
+	import * as rdfio from './myrdf_io.js';
+
 	import cytoscape from 'cytoscape'
 	import edgeConnections from 'cytoscape-edge-connections';
 	import GraphStyles from './CytoscapeGraphStyles.js'
@@ -19,7 +22,7 @@
 	if (!cytoscape.inited)
 	{
 		cytoscape.inited = true;
-		console.log('cytoscape.use(...')
+		log('cytoscape.use(...')
 		cytoscape.use(edgeConnections);
 		cytoscape.use(automove)
 		cytoscape.use(dagre)
@@ -139,22 +142,22 @@ const cose_bilkent_layout =
 	function populate(query)
 	{
 		if (!container) return;
-		console.log('cyInstance = cytoscape(...');
+		log('cyInstance = cytoscape(...');
 		let l = get(layout);
-		console.log(l);
+		log(l);
 		cyInstance = cytoscape({
 			container,
 			style: GraphStyles
 		})
 		cyInstance.on('mouseover', function (evt)
 		{
-			//console.log(evt);
+			//log(evt);
 		});
 
 		ecInstance = cyInstance.edgeConnections();
 
-		//console.log('$source_query');
-		//console.log($source_query);
+		//log('$source_query');
+		//log($source_query);
 		let nodes = {};
 		let edges = [];
 		let literals = [];
@@ -170,8 +173,8 @@ const cose_bilkent_layout =
 			if (quad.g === undefined)
 				alert(quad);
 
-			let s = stringinze(quad.s);
-			let o = stringinze(quad.o);
+			let s = rdfio.stringify_my_node(quad.s);
+			let o = rdfio.stringify_my_node(quad.o);
 			[s, o].forEach((n) =>
 			{
 				nodes[n] = nodes[n] || {
@@ -191,25 +194,19 @@ const cose_bilkent_layout =
 		//cyInstance.addNodes(nodes);
 
 		const nodes_list = Object.values(nodes);
-		console.log(nodes_list.length + ' nodes')
+		log(nodes_list.length + ' nodes')
 		cyInstance.add(nodes_list);
-		//console.log(nodes)
+		//log(nodes)
 		/*Object.keys(nodes).forEach(n =>
 			cyInstance.add(nodes[n]));
 			*/
 
-		console.log(edges.length + ' edges')
-		//console.log(edges)
+		log(edges.length + ' edges')
+		//log(edges)
 		ecInstance.addEdges(edges);
 		set_layout(cose_bilkent_layout);
 	}
 
-	function stringinze(x)
-	{
-		if (typeof x === 'string' || x instanceof String)
-			return x;
-		return JSON.stringify(x, null, '');
-	}
 
 	function auauau()
 	{
