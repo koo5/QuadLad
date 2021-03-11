@@ -3,6 +3,8 @@
 	import {addQuad,raw_query,kb,clear,busy} from './my_quadstore';
 	import * as rdfio from './myrdf_io.js';
 
+	$: console.log('kb has ' + $kb.length + ' items');
+
 	async function clear0()
 	{
 		await clear();
@@ -36,3 +38,4 @@ kb:
 <button on:click='{() => addDummyQuad()}'>Add random</button>
 <button on:click={()=>rdfio.save_myrdf_quad_query_as_file_download($kb)}>Save as TriG</button>
 <button on:click={()=>load_demo_dataset()}>Load demo N3</button>
+| {$kb.length} items |

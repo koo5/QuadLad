@@ -1,37 +1,3 @@
-<script>
-	import Router from 'svelte-spa-router';
-	import Home from './rHome.svelte'
-	import Raw from './Raw.svelte'
-	import QuadTable from './QuadTable.svelte'
-	import Cytoscape from './rCytoscape.svelte'
-	//import TextEditor from './rTextEditor.svelte';
-	import Prefixes from './rPrefixes.svelte';
-	import Log from './rLog.svelte';
-	import Falcon from './rFalcon.svelte';
-	import Name from './rName.svelte'
-	import Wild from './rWild.svelte'
-	import NotFound from './rNotFound.svelte'
-	import About from './About.svelte'
-	import KbOps from './KbOps.svelte'
-
-	let routes = {
-		'/': Home,
-		'/cytoscape': Cytoscape,
-		'/raw': Raw,
-		'/quad_table': QuadTable,
-		'/about': About,
-
-
-		// Using named parameters, with last being optional
-		'/hello/:first/:last?': Name,
-		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
-		'/wild': Wild,
-		'/wild/*': Wild,
-		// Catch-all, must be last
-		'*': NotFound,
-	}
-</script>
-
 <div class="box">
 	<div class="row header">
 		<ul>
@@ -39,6 +5,7 @@
 			<li><a href="#/raw">Raw</a></li>
 			<li><a href="#/quad_table">QuadTable</a></li>
 			<li><a href="#/cytoscape">Cytoscape</a></li>
+			<li><a href="#/delogic">Delogic</a></li>
 			<li><a href="#/falcon">Falcon</a></li>
 			<li><a href="#/about">About</a></li>
 		</ul>
@@ -50,6 +17,49 @@
 		<Router {routes}/>
 	</div>
 </div>
+
+
+
+
+<script>
+	import Router from 'svelte-spa-router';
+	import Home from './rHome.svelte'
+	import Raw from './Raw.svelte'
+	import QuadTable from './QuadTable.svelte'
+	import Cytoscape from './rCytoscape.svelte'
+	//import TextEditor from './rTextEditor.svelte';
+	import Prefixes from './rPrefixes.svelte';
+	import Log from './rLog.svelte';
+	import Falcon from './rFalcon.svelte';
+	import Name from './rName.svelte'
+	import Delogic from './rDelogic.svelte'
+	import Wild from './rWild.svelte'
+	import NotFound from './rNotFound.svelte'
+	import About from './About.svelte'
+	import KbOps from './KbOps.svelte'
+
+	let routes = {
+		'/': Home,
+		'/cytoscape': Cytoscape,
+		'/raw': Raw,
+		'/quad_table': QuadTable,
+		'/about': About,
+		'/delogic': Delogic,
+		// ---
+		// Using named parameters, with last being optional
+		'/hello/:first/:last?': Name,
+		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
+		'/wild': Wild,
+		'/wild/*': Wild,
+		// Catch-all, must be last
+		'*': NotFound,
+	}
+</script>
+
+
+
+
+
 
 <style>
     :global(html, body) {
@@ -112,4 +122,5 @@
         text-decoration: underline wavy blue;
     }
 </style>
+
 

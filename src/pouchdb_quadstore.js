@@ -22,6 +22,8 @@ import {assert} from './utils.js';
 
 export const quadstore = () =>
 {
+	let my_timeout;
+
 	/* let's not support multiple instances yet */
 	var db = new PouchDB('kittens');
 	//db.info(console.log);
@@ -34,29 +36,34 @@ export const quadstore = () =>
 
 	function grab_all_quads()
 	{
-		db.allDocs({include_docs: true, descending: true}, function (err, doc)
+		if (my_timeout)
+			clearTimeout(my_timeout);
+		my_timeout = setTimeout(() =>
 		{
-			if (err) alert(err);
-			//console.log("db.allDocs = ");
-			console.log(doc);
-			let quads = [];//todo let's switch this back to an object
-			/*
-			db.allDocs([options], [callback])
-			Fetch multiple documents, indexed and sorted by the _id. Deleted documents are only included if options.keys is specified.
-			^ idk what indexed means here.
-			*/
-			doc.rows.forEach(r => quads.push(r.doc));
-			//console.log(quads);
-			try
+			db.allDocs({include_docs: true, descending: true}, function (err, doc)
 			{
-				_writable.set(quads);
-			} catch
-				(e)
-			{
-				alert(e)
-			}
-			busy.set(false);
-		});
+				if (err) alert(err);
+				//console.log("db.allDocs = ");
+				//console.log(doc);
+				let quads = [];//todo let's switch this back to an object
+				/*
+				db.allDocs([options], [callback])
+				Fetch multiple documents, indexed and sorted by the _id. Deleted documents are only included if options.keys is specified.
+				^ idk what indexed means here.
+				*/
+				doc.rows.forEach(r => quads.push(r.doc));
+				//console.log(quads);
+				try
+				{
+					console.log('_writable.set(quads);');
+					_writable.set(quads);
+				} catch (e)
+				{
+					alert(e)
+				}
+				busy.set(false);
+			});
+		}, 300);
 	}
 
 	db.changes({
@@ -74,10 +81,22 @@ export const quadstore = () =>
 		return filter_quads_by_query(_query, quads);
 	});
 
+	function bulkAddQuads(qs)
+	{
+		db.bulkDocs(qs, {}, function (err)
+		{
+			if (err)
+			{
+				alert(err);
+			}
+		});
+	}
+
 	function addQuad(q)
 	{
 		//q._id = q.g;
 		//db.put(q, function callback(err)
+		console.log('addQuad');
 		db.post(q, function callback(err)
 		{
 			if (err) alert(err);
@@ -87,15 +106,27 @@ export const quadstore = () =>
 	async function clear()
 	{
 		busy.set(true);
-		await get(_writable).forEach(async (x) =>
+		/*await get(_writable).forEach(async (x) =>
 		{
 			try
 			{
 				await db.remove(x)
-			}
-			catch (e)
+			} catch (e)
 			{
 				alert(e);
+			}
+		});
+		*/
+		let docs = get(_writable);
+		docs.forEach(x =>
+		{
+			x._deleted = true;
+		});
+		db.bulkDocs(docs, {}, function (err)
+		{
+			if (err)
+			{
+				alert(err);
 			}
 		});
 	}
@@ -105,7 +136,7 @@ export const quadstore = () =>
 
 	}
 
-	return {raw_query, query2, addQuad, clear, busy};
+	return {raw_query, query2, addQuad, bulkAddQuads, clear, busy};
 }
 
 function filter_quads_by_query(query, quads)
@@ -182,12 +213,6 @@ function xxx()
 		}
 	}
 }
-
-
-
-
-
-
 
 
 /*

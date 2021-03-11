@@ -36,11 +36,11 @@
 	let cyInstance = null
 	let ecInstance = null;
 
-	let default_layout =
+	let grid_layout =
 		{
 			name: 'grid',
 			fit: true, // whether to fit the viewport to the graph
-			padding: 30, // padding used on fit
+			padding: 3, // padding used on fit
 			boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
 			avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
 			avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
@@ -68,60 +68,148 @@
 			} // transform a given node position. Useful for changing flow direction in discrete layouts
 		};
 
-	let layout = writable(default_layout);
-	$: cyInstance && populate($source_query);
-	onMount(() =>
+
+const cose_bilkent_layout =
+	{
+		name: 'cose-bilkent',
+		ready: function ()
+		{
+		},
+		// Called on `layoutstop`
+		stop: function ()
+		{
+		},
+		// 'draft', 'default' or 'proof"
+		// - 'draft' fast cooling rate
+		// - 'default' moderate cooling rate
+		// - "proof" slow cooling rate
+		quality: 'proof',
+		// Whether to include labels in node dimensions. Useful for avoiding label overlap
+		nodeDimensionsIncludeLabels: false,
+		// number of ticks per frame; higher is faster but more jerky
+		refresh: 30,
+		// Whether to fit the network view after when done
+		fit: true,
+		// Padding on fit
+		padding: 10,
+		// Whether to enable incremental mode
+		randomize: true,
+		// Node repulsion (non overlapping) multiplier
+		nodeRepulsion: 4500,
+		// Ideal (intra-graph) edge length
+		idealEdgeLength: 50,
+		// Divisor to compute edge forces
+		edgeElasticity: 0.45,
+		// Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
+		nestingFactor: 0.1,
+		// Gravity force (constant)
+		gravity: 0.25,
+		// Maximum number of iterations to perform
+		numIter: 2500,
+		// Whether to tile disconnected nodes
+		tile: true,
+		// Type of layout animation. The option set is {'during', 'end', false}
+		animate: true,
+		// Duration for animate:end
+		animationDuration: 1500,
+		// Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
+		tilingPaddingVertical: 10,
+		// Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
+		tilingPaddingHorizontal: 10,
+		// Gravity range (constant) for compounds
+		gravityRangeCompound: 1.5,
+		// Gravity force (constant) for compounds
+		gravityCompound: 1.0,
+		// Gravity range (constant)
+		gravityRange: 3.8,
+		// Initial cooling factor for incremental layout
+		initialEnergyOnIncremental: 0.5
+	}
+
+
+	let layout = writable(cose_bilkent_layout);
+
+	$: populate($source_query);
+
+	/*onMount(() =>
 	{
 		populate(get(source_query))
-	});
+	});*/
 
 	function populate(query)
 	{
+		if (!container) return;
 		console.log('cyInstance = cytoscape(...');
-
+		let l = get(layout);
+		console.log(l);
 		cyInstance = cytoscape({
 			container,
-			style: GraphStyles,
-			layout: $layout,
+			style: GraphStyles
 		})
+		cyInstance.on('mouseover', function (evt)
+		{
+			//console.log(evt);
+		});
+
 		ecInstance = cyInstance.edgeConnections();
 
-		console.log('$source_query');
-		console.log($source_query);
+		//console.log('$source_query');
+		//console.log($source_query);
 		let nodes = {};
 		let edges = [];
 		let literals = [];
 
 		query.forEach((quad) =>
 		{
-			[quad.s, quad.o].forEach((n) =>
+			if (quad.s === undefined)
+				alert(quad);
+			if (quad.p === undefined)
+				alert(quad);
+			if (quad.o === undefined)
+				alert(quad);
+			if (quad.g === undefined)
+				alert(quad);
+
+			let s = stringinze(quad.s);
+			let o = stringinze(quad.o);
+			[s, o].forEach((n) =>
 			{
-				let str = n;
 				nodes[n] = nodes[n] || {
 					group: 'nodes',
 					classes: 'node',
-					id: str,
-					data: {id: str, label: str}
+					id: n,
+					data: {id: n, label: n}
 				}
 			});
 			edges.push({
+				/* ok it's not so easy. with each edge, we should grab a list of graphs that it's in. Then, for each graph, we should grab all its relations, and for each one, create an arrow to/from this edge.*/
 				id: quad.idx,
 				group: 'edges',
-				data: {id: quad.idx, source: quad.s, target: quad.o, label: quad.p + '<br>' + quad.g}
+				data: {id: quad.idx, source: s, target: o, label: quad.p/* + ' g:' + quad.g*/}
 			});
 		});
 		//cyInstance.addNodes(nodes);
 
-		console.log('nodes')
-		console.log(nodes)
-		Object.keys(nodes).forEach(n =>
+		const nodes_list = Object.values(nodes);
+		console.log(nodes_list.length + ' nodes')
+		cyInstance.add(nodes_list);
+		//console.log(nodes)
+		/*Object.keys(nodes).forEach(n =>
 			cyInstance.add(nodes[n]));
-		console.log('edges')
-		console.log(edges)
+			*/
+
+		console.log(edges.length + ' edges')
+		//console.log(edges)
 		ecInstance.addEdges(edges);
-		lalala();
+		set_layout(cose_bilkent_layout);
 	}
 
+	function stringinze(x)
+	{
+		if (typeof x === 'string' || x instanceof String)
+			return x;
+		return JSON.stringify(x, null, '');
+	}
 
 	function auauau()
 	{
@@ -225,62 +313,7 @@
 
 	function lalala2()
 	{
-		set_layout(
-			{
-				name: 'cose-bilkent',
-				ready: function ()
-				{
-				},
-				// Called on `layoutstop`
-				stop: function ()
-				{
-				},
-				// 'draft', 'default' or 'proof"
-				// - 'draft' fast cooling rate
-				// - 'default' moderate cooling rate
-				// - "proof" slow cooling rate
-				quality: 'proof',
-				// Whether to include labels in node dimensions. Useful for avoiding label overlap
-				nodeDimensionsIncludeLabels: false,
-				// number of ticks per frame; higher is faster but more jerky
-				refresh: 30,
-				// Whether to fit the network view after when done
-				fit: true,
-				// Padding on fit
-				padding: 10,
-				// Whether to enable incremental mode
-				randomize: true,
-				// Node repulsion (non overlapping) multiplier
-				nodeRepulsion: 4500,
-				// Ideal (intra-graph) edge length
-				idealEdgeLength: 50,
-				// Divisor to compute edge forces
-				edgeElasticity: 0.45,
-				// Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
-				nestingFactor: 0.1,
-				// Gravity force (constant)
-				gravity: 0.25,
-				// Maximum number of iterations to perform
-				numIter: 2500,
-				// Whether to tile disconnected nodes
-				tile: true,
-				// Type of layout animation. The option set is {'during', 'end', false}
-				animate: true,
-				// Duration for animate:end
-				animationDuration: 1500,
-				// Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
-				tilingPaddingVertical: 10,
-				// Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
-				tilingPaddingHorizontal: 10,
-				// Gravity range (constant) for compounds
-				gravityRangeCompound: 1.5,
-				// Gravity force (constant) for compounds
-				gravityCompound: 1.0,
-				// Gravity range (constant)
-				gravityRange: 3.8,
-				// Initial cooling factor for incremental layout
-				initialEnergyOnIncremental: 0.5
-			});
+		set_layout(cose_bilkent_layout);
 	}
 
 </script>
@@ -303,44 +336,43 @@
 
 <style>
 
-    .graph {
-        background: #ffddff;
-        height: 100%;
-        /*filter: hue-rotate(0 deg) contrast(1) invert(0) saturate(2);*/
-    }
+	.graph {
+		background: #ffddff;
+		height: 100%;
+		/*filter: hue-rotate(0 deg) contrast(1) invert(0) saturate(2);*/
+	}
 
 
+	.box {
+		display: flex;
+		flex-flow: column;
+		height: 100%;
+	}
 
-    .box {
-        display: flex;
-        flex-flow: column;
-        height: 100%;
-    }
+	.box .row {
+		padding: 0.2ex;
+	}
 
-    .box .row {
-		padding:0.2ex;
-    }
-
-    .box .row.header {
+	.box .row.header {
 		border-bottom: 1px dashed orange;
-        flex: 0 1 auto;
-        /* The above is shorthand for:
+		flex: 0 1 auto;
+		/* The above is shorthand for:
 		flex-grow: 0,
 		flex-shrink: 1,
 		flex-basis: auto
 		*/
-    }
+	}
 
-    .box .row.content {
+	.box .row.content {
 		border-bottom: 1px dashed orange;
-        flex: 1 1 auto;
-    }
+		flex: 1 1 auto;
+	}
 
-    .box .row.footer {
-        flex: 0 1;
+	.box .row.footer {
+		flex: 0 1;
 		padding: 0;
 
-    }
+	}
 
 
 </style>
