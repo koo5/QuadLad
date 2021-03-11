@@ -4,7 +4,7 @@
 </script>
 
 <main>
-	<Outer uri="<rooot>"/>
+	<Outer uri="<node1>"/>
 </main>
 
 
