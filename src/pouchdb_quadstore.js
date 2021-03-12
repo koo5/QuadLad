@@ -3,7 +3,7 @@ import {assert} from './utils.js';
 import {log} from './log_store.js';
 import {bulkAddQuads} from './my_quadstore';
 import _, { map } from 'underscore';
-
+import {filter_quads_by_query} from 'query.js';
 
 export const quadstore = () =>
 {
@@ -140,30 +140,6 @@ export const quadstore = () =>
 	return {queries, raw_query, query2, addQuad, addQuads, bulkAddQuads, clear, busy};
 }
 
-function filter_quads_by_query(query, quads)
-{
-	let result = [];
-	var i = 0;
-	//log(quads);
-	quads.forEach(quad =>
-	{
-		i++;
-		if (
-			match(query.s, quad.s) &&
-			match(query.p, quad.p) &&
-			match(query.o, quad.o) &&
-			match(query.g, quad.g)
-		)
-			result.push({...quad, idx: i});
-	});
-	return result;
-}
-
-function match(query, node)
-{
-	return (query == undefined || query == "?" || query == node);
-}
-
 
 /*
 What follows is the first layer of convenience, wrapping the purely non-deterministic-ish raw_query() interface.
@@ -175,8 +151,7 @@ function xxx()
 		determinancy_check: {
 			description: `
 			An error is indicated if this is violated.
-			Determinancy check happens before default_result logic, so, it acts on the actual results, not on results amended with defaults.
-			
+			Determinancy check happens before default_result logic, so, it acts on the actual results, not on results amended with defaults.			
 			`,
 			options: {
 				'!': 'one solution',

@@ -9,6 +9,12 @@ export function f(data)
 	{
 		buffer.push({
 			s: id,
+			p: "rdf:type",
+			o: 'delogic:node',
+			g: '<idk#' + Date.now().toString() + '>'
+		});
+			buffer.push({
+			s: id,
 			p: "delogic:parent",
 			o: data['parent'],
 			g: '<idk#' + Date.now().toString() + '>'

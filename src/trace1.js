@@ -1,5 +1,5 @@
 import {f} from "./trace_import.js";
-f( {
+f({
   "type":"node",
   "@id":"node1",
   "args": ["arg1" ],

@@ -2,15 +2,9 @@
 	import {log} from './log_store.js';
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 	import {raw_query} from './my_quadstore';
+	import {filter_quads_by_query} from 'query.js';
 
 	export let uri;
-
-	$: presentation = (() =>
-	{
-		//if (presentation_selection_strategy == "rkef:automatic")
-		//...
-		return "rkef:table_of_properties";
-	})();
 
 	let q1 = raw_query({s: uri});
 	let q2 = raw_query({o: uri});
@@ -22,6 +16,22 @@
 	$: unhandled_quads = all_quads;
 	$: label = uri;
 
+	$: presentation = ((q1) =>
+	{
+		console.log(q1);
+		//if (presentation_selection_strategy == "rkef:automatic")
+		//...
+
+		// i'll just run the query "by hand" here for now..
+		let xx = filter_quads_by_query({s: uri,p: "rdf:type"}, q1);
+		let type = xx?[0].o;
+		if (type == 'delogic:node')
+			return 'delogic:node';
+
+
+
+		return "rkef:table_of_properties";
+	})();
 
 	let presentation_selection_strategy;
 	/*

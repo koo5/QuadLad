@@ -42,5 +42,5 @@ kb:
 <button on:click={()=>load_demo_dataset()}>Load demo N3</button>
 <br>
 | {$kb.length} items |
-queries:{JSON.stringify($queries, null, '')} | busy:{$busy} | 
+queries:{JSON.stringify($queries, null, '')} | busy:{$busy} |
 
