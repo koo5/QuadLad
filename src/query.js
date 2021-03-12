@@ -3,7 +3,7 @@ export function filter_quads_by_query(query, quads)
 	let result = [];
 	var i = 0;
 	//log(quads);
-	quads.forEach(quad =>
+	quads?.forEach(quad =>
 	{
 		i++;
 		if (

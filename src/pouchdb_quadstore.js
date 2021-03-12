@@ -3,7 +3,7 @@ import {assert} from './utils.js';
 import {log} from './log_store.js';
 import {bulkAddQuads} from './my_quadstore';
 import _, { map } from 'underscore';
-import {filter_quads_by_query} from 'query.js';
+import {filter_quads_by_query} from './query.js';
 
 export const quadstore = () =>
 {
