@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "snowpack dev --polyfill-node",
-    "build": "snowpack build",
+    "build": "snowpack build  --polyfill-node",
     "test": "web-test-runner \"src/**/*.test.ts\""
   },
   "dependencies": {
