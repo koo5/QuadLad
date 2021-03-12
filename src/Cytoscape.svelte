@@ -327,7 +327,6 @@ const cose_bilkent_layout =
 	<div class="row content">
 		<div class="graph" bind:this={container}/>
 	</div>
-	<div class="row footer"><small>footsies</small></div>
 </div>
 
 
@@ -337,38 +336,6 @@ const cose_bilkent_layout =
 		background: #ffddff;
 		height: 100%;
 		/*filter: hue-rotate(0 deg) contrast(1) invert(0) saturate(2);*/
-	}
-
-
-	.box {
-		display: flex;
-		flex-flow: column;
-		height: 100%;
-	}
-
-	.box .row {
-		padding: 0.2ex;
-	}
-
-	.box .row.header {
-		border-bottom: 1px dashed orange;
-		flex: 0 1 auto;
-		/* The above is shorthand for:
-		flex-grow: 0,
-		flex-shrink: 1,
-		flex-basis: auto
-		*/
-	}
-
-	.box .row.content {
-		border-bottom: 1px dashed orange;
-		flex: 1 1 auto;
-	}
-
-	.box .row.footer {
-		flex: 0 1;
-		padding: 0;
-
 	}
 
 

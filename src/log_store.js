@@ -8,3 +8,6 @@ export function log(x)
 	console.log(x);
 	log_store.update(old_state => [x].concat(old_state));
 }
+
+export const minibuffer_store = writable([]);
+

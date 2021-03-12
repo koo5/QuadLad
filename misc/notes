@@ -4,10 +4,3 @@ https://swi-prolog.discourse.group/t/ide-editor-for-swi-prolog/584/37
 https://github.com/edisonm/xtools/tree/master/prolog
 
 
-
-
-PouchDB.replicate('mydb', 'http://localhost:5984/mydb', {live: true});
-Then open up http://localhost:5984/_utils.
-
-
-

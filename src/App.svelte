@@ -13,15 +13,25 @@
 	<div class="row header">
 		<KbOps/>
 	</div>
+	<div class="row header">
+		<Minibuffer/>
+	</div>
 	<div class="row content">
 		<Router {routes}/>
 	</div>
+	<div class="row footer"><small>footsies</small></div>
+
 </div>
 
-
+<svelte:window on:keydown={(evt) => {
+	//console.log(evt);
+	let x = JSON.stringify(evt.key, null, '');
+	minibuffer_store.set(x)}}
+/>
 
 
 <script>
+	import {minibuffer_store} from './log_store.js';
 	import Router from 'svelte-spa-router';
 	import Home from './rHome.svelte'
 	import Raw from './Raw.svelte'
@@ -37,6 +47,7 @@
 	import NotFound from './rNotFound.svelte'
 	import About from './About.svelte'
 	import KbOps from './KbOps.svelte'
+	import Minibuffer from './Minibuffer.svelte'
 
 	let routes = {
 		'/': Home,
@@ -54,6 +65,9 @@
 		// Catch-all, must be last
 		'*': NotFound,
 	}
+
+	minibuffer_store.set('welcome!');
+
 </script>
 
 
@@ -73,17 +87,17 @@
         box-sizing: border-box;
     }
 
-    .box {
+    :global(.box) {
         display: flex;
         flex-flow: column;
         height: 100%;
     }
 
-    .box .row {
+    :global(.box .row) {
 		padding:0.2ex;
     }
 
-    .box .row.header {
+    :global(.box .row.header) {
 		border-bottom: 1px dotted orange;
         flex: 0 1 auto;
         /* The above is shorthand for:
@@ -93,13 +107,13 @@
 		*/
     }
 
-    .box .row.content {
-
+    :global(.box .row.content) {
         flex: 1 1 auto;
     }
 
-    .box .row.footer {
-        flex: 0 1 40px;
+    :global(.box .row.footer) {
+        flex: 0 1;
+        padding: 0;
     }
 
 
