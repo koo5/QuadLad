@@ -56,6 +56,7 @@
 		{#if presentation == undefined}
 			presentation == undefined!
 		{:else if presentation == 'delogic:node'}
+			
 			"delogic:node"
 		{:else if presentation == "robust:result"}
 			"robust:result"
