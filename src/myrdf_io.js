@@ -1,6 +1,11 @@
 import * as N3 from 'n3';
 //import {log} from './log_store.js';
 
+export function is_literal(x)
+{
+	return x.substring(0,1) == '"';
+}
+
 export function stringify_my_node(x)
 	{
 		if (typeof x === 'string' || x instanceof String)

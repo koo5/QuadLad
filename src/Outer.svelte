@@ -3,8 +3,14 @@
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 	import {raw_query} from './my_quadstore';
 	import {filter_quads_by_query} from './query.js';
+	import Qr from './Qr.svelte';
 
 	export let uri;
+
+	//let presentation_selection_strategy;
+	/*
+		<PresentationSelector uri/>
+	 */
 
 	let q1 = raw_query({s: uri});
 	let q2 = raw_query({o: uri});
@@ -41,10 +47,26 @@
 		return "rkef:table_of_properties";
 	})(v1);
 
-	let presentation_selection_strategy;
-	/*
-		<PresentationSelector uri/>
-	 */
+
+
+	$: {ldo, remaining_quads} = produce_ldo(sp_quads, po_quads);
+
+
+	function prop(pred)
+	{
+
+		return derived(
+			query(uri, pred),
+			(sp_quads) =>
+			{
+				results = []
+				sp_quads.forEach(q =>
+				{
+					results.push( {position: 'o', quad: q});
+				);
+			}
+
+
 
 </script>
 
@@ -56,7 +78,16 @@
 		{#if presentation == undefined}
 			presentation == undefined!
 		{:else if presentation == 'delogic:node'}
-			
+			{
+			/*
+				<div><Pd result={prop(uri, "delogic:str")}/>
+				<ul>
+					{#each node.args as arg}
+						<Pd result={arg}/>
+					{/each}
+				</ul>
+			*/
+			}
 			"delogic:node"
 		{:else if presentation == "robust:result"}
 			"robust:result"
