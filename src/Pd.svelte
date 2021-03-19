@@ -1,4 +1,5 @@
 <script>
+	/* Property Display */
 	import ResultItem from './ResultItem.svelte';
 	export let results;
 	/* is either undefined, or a list of

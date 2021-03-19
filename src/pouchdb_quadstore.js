@@ -4,6 +4,7 @@ import {log} from './log_store.js';
 import {bulkAddQuads} from './my_quadstore';
 import _, { map } from 'underscore';
 import {filter_quads_by_query} from './query.js';
+import {quads_are_equal} from './myrdf_io';
 
 export const quadstore = () =>
 {
@@ -65,10 +66,18 @@ export const quadstore = () =>
 
 	grab_all_quads();
 
-	let raw_query = (_query) => derived(_writable, quads =>
+	function raw_query(query_spec)
 	{
-		return filter_quads_by_query(_query, quads);
-	});
+		let current_result = undefined;
+		return derived(_writable, (quads, setter) =>
+		{
+			let new_result = filter_quads_by_query(query_spec, quads);
+			if (query_results_are_equal(new_result, current_result))
+				return;
+			current_result = new_result;
+			setter(new_result);
+		});
+	}
 
 	function bulkAddQuads(qs)
 	{
@@ -239,3 +248,27 @@ quadstore only implements subscribe for now.
 
 */
 
+
+/*
+
+multiple sources: for exapmle, one read-only,
+one rw. The rw one is where we would also store what quads are currently used up
+
+
+
+*/
+
+
+function query_results_are_equal(a, b)
+{
+	if (a === undefined)
+		return (b === undefined);
+	if (b === undefined)
+		return false;
+	if (a.length != b.length)
+		return false;
+	for (let i = 0; i < a.length; i++)
+		if (!quads_are_equal(a[i], b[i]))
+			return false;
+	return true;
+}

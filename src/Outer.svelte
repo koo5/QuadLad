@@ -3,7 +3,8 @@
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 	import {raw_query} from './my_quadstore';
 	import {filter_quads_by_query} from './query.js';
-	import Qr from './Qr.svelte';
+	import Pd from './Pd.svelte';
+	import {get, derived, writable} from 'svelte/store';
 
 	export let uri;
 
@@ -30,43 +31,28 @@
 		console.log(v1);
 		//if (presentation_selection_strategy == "rkef:automatic")
 		//...
-
 		// i'll just run the query "by hand" here for now..
-
 		let xx = filter_quads_by_query({s: uri,p: "rdf:type"}, v1);
 		console.log('xx');
 		console.log(xx);
-
-
 		let type = xx?.[0]?.o;
 		console.log('o');
 		console.log(type);
-
 		if (type == 'delogic:node')
 			return 'delogic:node';
 		return "rkef:table_of_properties";
 	})(v1);
 
-
-
-	$: {ldo, remaining_quads} = produce_ldo(sp_quads, po_quads);
-
-
 	function prop(pred)
 	{
-
-		return derived(
-			query(uri, pred),
-			(sp_quads) =>
-			{
-				results = []
-				sp_quads.forEach(q =>
-				{
-					results.push( {position: 'o', quad: q});
-				);
-			}
-
-
+		return derived(raw_query({s: uri, p: pred}), (sp_quads) =>
+		{
+			let results = []
+			sp_quads.forEach(q =>
+				results.push({position: 'o', quad: q}));
+			return results;
+		});
+	}
 
 </script>
 
@@ -78,17 +64,19 @@
 		{#if presentation == undefined}
 			presentation == undefined!
 		{:else if presentation == 'delogic:node'}
-			{
+			"delogic:node":
 			/*
-				<div><Pd result={prop(uri, "delogic:str")}/>
+				<div>str is: <Pd result={prop(uri, "delogic:str")}/>
 				<ul>
+
 					{#each node.args as arg}
-						<Pd result={arg}/>
+						arg is:<Pd result={prop(uri, "delogic:arg")}/>
 					{/each}
 				</ul>
+				</div>
 			*/
-			}
-			"delogic:node"
+
+
 		{:else if presentation == "robust:result"}
 			"robust:result"
 		{:else if presentation == "robust:document_set"}

@@ -47,5 +47,5 @@ export function f(data)
 			g: '<idk#' + Date.now().toString() + '>'
 		});
 	}
-	addQuads(buffer);
+	addQuads(buffer); /* todo: addQuadsNoDupes */
 }
