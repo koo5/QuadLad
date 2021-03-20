@@ -27,7 +27,9 @@
 />
 
 
+
 <script>
+	import { onMount, setContext } from 'svelte';
 	import {minibuffer_store} from './log_store.js';
 	import Router from 'svelte-spa-router';
 	import Home from './rHome.svelte'
@@ -46,6 +48,9 @@
 	import About from './About.svelte'
 	import KbOps from './KbOps.svelte'
 	import Minibuffer from './Minibuffer.svelte'
+
+	/*let handled_quads = {};
+	setContext('handled_quads', handled_quads);*/
 
 	let routes = {
 		'/': Home,

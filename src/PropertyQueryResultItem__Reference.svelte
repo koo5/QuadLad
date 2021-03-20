@@ -1,20 +1,25 @@
 <script>
+	import UsedQuad from './UsedQuad.svelte';
 	import {raw_query} from './my_quadstore';
 	import * as rdfio from "./myrdf_io.js";
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 
 	export let result;
-	let node = result.quad[result.position]
-	/* here we would look if the quad has any properties of its own */
+	let quad = result.quad;
+	let _id = quad._id;
+	let node = quad[result.position]
 	let quad_props = raw_query({s:result.quad._id})
 	let quad_rrops = raw_query({o:result.quad._id})
 	$: totlen = $quad_props.length + $quad_rrops.length;
 
+
+
 </script>
+<UsedQuad {_id}/>
 {#if rdfio.is_literal(node)}
 	literally {node}
 {:else}
-	<a href="/uri/{node}">{node}</a>
+	<a href="/#/uri/{node}">{node}</a>
 {/if}
 {#if totlen}
 <sup><small>({totlen} annotations)</small></sup>

@@ -5,7 +5,6 @@
 	let uri = params.uri;
 </script>
 <main>
-	<Pre x={uri}/>
 	<h3>viewing <code>{uri}</code>:</h3>
 	<Outer {uri}/>
 </main>
