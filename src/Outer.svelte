@@ -7,6 +7,7 @@
 	import Pr from './Pr.svelte';
 	import Pds from './Pds.svelte';
 	import {get, derived, writable} from 'svelte/store';
+	import UnhandledQuads from './UnhandledQuads.svelte';
 
 	export let uri;
 
@@ -17,10 +18,6 @@
 
 	let q1 = raw_query({s: uri});
 	let q2 = raw_query({o: uri});
-	$: console.log(q1);
-	$: console.log(q2);
-	$: console.log($q1);
-	$: console.log($q2);
 	$: v1 = $q1;
 	$: v2 = $q2;
 	$: all_quads = v1?.concat(v2);
@@ -30,17 +27,17 @@
 
 	$: presentation = ((v1) =>
 	{
-		console.log('v1');
-		console.log(v1);
+		/*console.log('v1');
+		console.log(v1);*/
 		//if (presentation_selection_strategy == "rkef:automatic")
 		//...
 		// i'll just run the query "by hand" here for now..
-		let xx = filter_quads_by_query({s: uri,p: "rdf:type"}, v1);
-		console.log('xx');
-		console.log(xx);
+		let xx = filter_quads_by_query({s: uri, p: "rdf:type"}, v1);
+		/*console.log('xx');
+		console.log(xx);*/
 		let type = xx?.[0]?.o;
-		console.log('o');
-		console.log(type);
+		/*console.log('o');
+		console.log(type);*/
 		if (type == 'delogic:node')
 			return 'delogic:node';
 		return "rkef:table_of_properties";
@@ -88,10 +85,7 @@
 			<pre>{label}</pre>
 		{/if}
 
-		{#if remaining_quads_len}
-		<sup><small>({remaining_quads_len} remaining quads)</small></sup>
-		<RemainingQuadsTable quads={remaining_quads}/>
-		{/if}
+		<UnhandledQuads {uri}/>
 
 	{:else}
 		we know nothing about <code>{label}</code> here.

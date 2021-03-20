@@ -5,7 +5,7 @@
 	import {queries,addQuad,raw_query,kb,clear,busy} from './my_quadstore';
 	import * as rdfio from './myrdf_io.js';
 
-	$: log('kb has ' + $kb.length + ' items');
+	//$: log('kb has ' + $kb.length + ' items');
 
 	async function clear0()
 	{
