@@ -1,14 +1,9 @@
 <script>
-	/* Property Display */
-	import ResultItem from './ResultItem.svelte';
+	/* Property Reference
+	* - only show a link to somewhere where you'd get more info about the given resource
+	* */
+	import PropertyQueryResultItem__Reference from './PropertyQueryResultItem__Reference.svelte';
 	export let results;
-	/* is either undefined, or a list of
-	{
-		position: "s"/"o"
-		quad: a quad
-	}
-	*/
-
 	$: len = $results?.length || 0;
 
 </script>
@@ -20,7 +15,7 @@
 	<ol>
 		{#each $results as result}
 			<li>
-				<ResultItem {result}/>
+				<PropertyQueryResultItem__Reference {result}/>
 			</li>
 		{/each}
 	</ol>

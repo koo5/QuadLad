@@ -4,6 +4,7 @@
 	import {raw_query} from './my_quadstore';
 	import {filter_quads_by_query} from './query.js';
 	import Pd from './Pd.svelte';
+	import Pr from './Pr.svelte';
 	import Pds from './Pds.svelte';
 	import {get, derived, writable} from 'svelte/store';
 
@@ -23,7 +24,8 @@
 	$: v1 = $q1;
 	$: v2 = $q2;
 	$: all_quads = v1?.concat(v2);
-	$: unhandled_quads = all_quads;
+	$: remaining_quads = all_quads;
+	$: remaining_quads_len = remaining_quads.length;
 	$: label = uri;
 
 	$: presentation = ((v1) =>
@@ -59,7 +61,7 @@
 
 <div class="resource_display">
 	{#if all_quads.length != 0}
-		viewing {uri} as a {presentation}:<br/>
+		viewing <code>{uri}</code> as a {presentation}:<br/>
 
 		<!-- my domain specific views go here for now -->
 		{#if presentation == undefined}
@@ -70,7 +72,7 @@
 					str is: <Pd results={prop(uri, "delogic:str")}/>
 				</div>
 				<div class="resource_display">
-					type is: <Pd results={prop(uri, "rdf:type")}/>
+					type is: <Pr results={prop(uri, "rdf:type")}/>
 				</div>
 			</div>
 		{:else if presentation == "robust:result"}
@@ -86,8 +88,10 @@
 			<pre>{label}</pre>
 		{/if}
 
-		<!-- a table of all remaining quads -->
-		<RemainingQuadsTable quads={unhandled_quads}/>
+		{#if remaining_quads_len}
+		<sup><small>({remaining_quads_len} remaining quads)</small></sup>
+		<RemainingQuadsTable quads={remaining_quads}/>
+		{/if}
 
 	{:else}
 		we know nothing about <code>{label}</code> here.
@@ -97,7 +101,7 @@
 
 <style>
     :global(.resource_display) {
-        margin: 0.0em;
+        margin: 0.3em;
 		border: 1px inset rgba(28,110,164,0.48);
 		border-radius: 0px 17px 12px 13px;
 	}

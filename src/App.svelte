@@ -39,6 +39,7 @@
 	import Log from './rLog.svelte';
 	import Falcon from './rFalcon.svelte';
 	import Name from './rName.svelte'
+	import Uri from './rUri.svelte'
 	import Delogic from './rDelogic.svelte'
 	import Wild from './rWild.svelte'
 	import NotFound from './rNotFound.svelte'
@@ -55,6 +56,7 @@
 		'/delogic': Delogic,
 		// ---
 		// Using named parameters, with last being optional
+		'/uri/:uri': Uri,
 		'/hello/:first/:last?': Name,
 		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
 		'/wild': Wild,
