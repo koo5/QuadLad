@@ -83,6 +83,13 @@
         padding: 0;
         color: #333;
         box-sizing: border-box;
+        max-width: 100%;
+
+		border-radius: 6px;
+		background-color: aliceblue;
+		white-space: nowrap;
+		/*overflow: hidden;*/
+		text-overflow: ellipsis;
 
     }
 

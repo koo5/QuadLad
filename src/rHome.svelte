@@ -1,10 +1,11 @@
 <script>
 	import Outer from './Outer.svelte';
+	let uri = "<x>";
 </script>
 
 <main>
-	<h3>viewing <code>"&#60;x&#62;"</code>:</h3>
-	<Outer uri="<x>"/>
+	<h3>viewing <code>{uri}</code>:</h3>
+	<Outer {uri}/>
 </main>
 
 

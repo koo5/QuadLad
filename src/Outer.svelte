@@ -96,9 +96,8 @@
 </div>
 
 <style>
-    .resource_display {
-        margin: 0;
-        padding: 0.2em;
+    :global(.resource_display) {
+        margin: 0.0em;
 		border: 1px inset rgba(28,110,164,0.48);
 		border-radius: 0px 17px 12px 13px;
 	}
