@@ -9,11 +9,11 @@
 	}
 	*/
 </script>
-{#if results == undefined}
+{#if $results == undefined}
 -
 {:else}
-	{#each results as result}
-		<ResultItem result/>
+	{#each $results as result}
+		<ResultItem {result}/><br/>
 	{/each}
 {/if}
 

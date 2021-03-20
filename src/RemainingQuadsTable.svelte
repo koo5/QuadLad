@@ -1,4 +1,6 @@
 <script>
+	import Pre from './Pre.svelte';
+
 	import { Table } from 'sveltestrap';
 	import * as rdfio from './myrdf_io';
 	export let quads;
@@ -21,6 +23,7 @@
 	</tr>
 	</thead>
 	<tbody>
+	<Pre x={quads}>
 	{#each quads as quad (quad.idx)}
 		<tr>
 			<th scope="row">{quad.idx}</th>
@@ -30,5 +33,6 @@
 			<td>{node_str(quad.g)}</td>
 		</tr>
 	{/each}
+	</Pre>
 	</tbody>
 </table>

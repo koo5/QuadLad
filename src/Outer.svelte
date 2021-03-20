@@ -4,6 +4,7 @@
 	import {raw_query} from './my_quadstore';
 	import {filter_quads_by_query} from './query.js';
 	import Pd from './Pd.svelte';
+	import Pds from './Pds.svelte';
 	import {get, derived, writable} from 'svelte/store';
 
 	export let uri;
@@ -43,7 +44,7 @@
 		return "rkef:table_of_properties";
 	})(v1);
 
-	function prop(pred)
+	function prop(uri, pred)
 	{
 		return derived(raw_query({s: uri, p: pred}), (sp_quads) =>
 		{
@@ -56,27 +57,22 @@
 
 </script>
 
-<div>
+<div class="resource_display">
 	{#if all_quads.length != 0}
-		viewing as {presentation}:<br/>
+		viewing {uri} as a {presentation}:<br/>
 
 		<!-- my domain specific views go here for now -->
 		{#if presentation == undefined}
 			presentation == undefined!
 		{:else if presentation == 'delogic:node'}
-			"delogic:node":
-			/*
-				<div>str is: <Pd result={prop(uri, "delogic:str")}/>
-				<ul>
-
-					{#each node.args as arg}
-						arg is:<Pd result={prop(uri, "delogic:arg")}/>
-					{/each}
-				</ul>
+			<div class="resource_display">
+				<div class="resource_display">
+					str is: <Pd results={prop(uri, "delogic:str")}/>
 				</div>
-			*/
-
-
+				<div class="resource_display">
+					type is: <Pd results={prop(uri, "rdf:type")}/>
+				</div>
+			</div>
 		{:else if presentation == "robust:result"}
 			"robust:result"
 		{:else if presentation == "robust:document_set"}
@@ -98,3 +94,12 @@
 	{/if}
 
 </div>
+
+<style>
+    .resource_display {
+        margin: 0;
+        padding: 0.2em;
+		border: 1px inset rgba(28,110,164,0.48);
+		border-radius: 0px 17px 12px 13px;
+	}
+</style>

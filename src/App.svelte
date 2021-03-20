@@ -13,13 +13,10 @@
 	<div class="row header">
 		<KbOps/>
 	</div>
-	<div class="row header">
-		<Minibuffer/>
-	</div>
 	<div class="row content">
 		<Router {routes}/>
 	</div>
-	<div class="row footer"><small>footsies</small></div>
+	<div class="row footer"><small><Minibuffer/></small></div>
 
 </div>
 
@@ -77,6 +74,7 @@
 
 <style>
     :global(html, body) {
+		line-height: 1;
         position: relative;
         width: 100%;
         height: 100%;
@@ -85,19 +83,31 @@
         padding: 0;
         color: #333;
         box-sizing: border-box;
+
     }
 
     :global(.box) {
+    	padding-left: 1em;
+    	padding-right: 1em;
+		line-height: 1;
         display: flex;
         flex-flow: column;
         height: 100%;
+
     }
+
+	:global(.btn) {
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		line-height: 1 !important;
+	}
 
     :global(.box .row) {
 		padding:0.2ex;
     }
 
     :global(.box .row.header) {
+
 		border-bottom: 1px dotted orange;
         flex: 0 1 auto;
         /* The above is shorthand for:
