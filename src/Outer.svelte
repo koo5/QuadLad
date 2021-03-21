@@ -1,4 +1,5 @@
 <script>
+	import UsedQuad from './UsedQuad.svelte';
 	import {log} from './log_store.js';
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 	import {raw_query} from './my_quadstore';
@@ -25,23 +26,22 @@
 	$: remaining_quads_len = remaining_quads.length;
 	$: label = uri;
 
-	$: presentation = ((v1) =>
+	$: type_quad_used = ((v1) =>
 	{
-		/*console.log('v1');
-		console.log(v1);*/
 		//if (presentation_selection_strategy == "rkef:automatic")
 		//...
 		// i'll just run the query "by hand" here for now..
 		let xx = filter_quads_by_query({s: uri, p: "rdf:type"}, v1);
-		/*console.log('xx');
-		console.log(xx);*/
-		let type = xx?.[0]?.o;
-		/*console.log('o');
-		console.log(type);*/
+		return xx?.[0];
+	})(v1);
+
+	$: presentation = ((type_quad_used) =>
+	{
+		let type = type_quad_used?.o;
 		if (type == 'delogic:node')
 			return 'delogic:node';
 		return "rkef:table_of_properties";
-	})(v1);
+	})(type_quad_used);
 
 	function prop(uri, pred)
 	{
@@ -55,7 +55,7 @@
 	}
 
 </script>
-
+<UsedQuad {type_quad_used}/>
 <div class="resource_display">
 	{#if all_quads.length != 0}
 		viewing <code>{uri}</code> as a {presentation}:<br/>
@@ -69,7 +69,7 @@
 					str is: <Pd results={prop(uri, "delogic:str")}/>
 				</div>
 				<div class="resource_display">
-					type is: <Pr results={prop(uri, "rdf:type")}/>
+					type is: <Pr results={prop(uri, "delogic:type")}/>
 				</div>
 			</div>
 		{:else if presentation == "robust:result"}

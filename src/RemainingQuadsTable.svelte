@@ -46,6 +46,4 @@
 		border-collapse: separate;
 		border-spacing: 1em 0;
 	}
-
-
 </style>
