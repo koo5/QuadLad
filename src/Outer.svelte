@@ -2,6 +2,7 @@
 	import UsedQuad from './UsedQuad.svelte';
 	import {log} from './log_store.js';
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
+	import DelogicNode from './DelogicNode.svelte';
 	import {raw_query} from './my_quadstore';
 	import {filter_quads_by_query} from './query.js';
 	import Pd from './Pd.svelte';
@@ -64,14 +65,7 @@
 		{#if presentation == undefined}
 			presentation == undefined!
 		{:else if presentation == 'delogic:node'}
-			<div class="resource_display">
-				<div class="resource_display">
-					str is: <Pd results={prop(uri, "delogic:str")}/>
-				</div>
-				<div class="resource_display">
-					type is: <Pr results={prop(uri, "delogic:type")}/>
-				</div>
-			</div>
+			<DelogicNode {uri}/>
 		{:else if presentation == "robust:result"}
 			"robust:result"
 		{:else if presentation == "robust:document_set"}

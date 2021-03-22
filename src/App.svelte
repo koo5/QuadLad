@@ -81,7 +81,7 @@
 
 <style>
     :global(html, body) {
-		line-height: 1;
+		line-height: 1em;
         position: relative;
         width: 100%;
         height: 100%;
@@ -91,23 +91,18 @@
         color: #333;
         box-sizing: border-box;
         max-width: 100%;
-
-		border-radius: 6px;
-		background-color: aliceblue;
 		white-space: nowrap;
 		/*overflow: hidden;*/
 		text-overflow: ellipsis;
-
     }
 
     :global(.box) {
+		line-height: 1em;
     	padding-left: 1em;
     	padding-right: 1em;
-		line-height: 1;
         display: flex;
         flex-flow: column;
-        height: 100%;
-
+        margin: 0;
     }
 
 	:global(.btn) {
