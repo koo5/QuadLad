@@ -1,6 +1,16 @@
 import * as N3 from 'n3';
 //import {log} from './log_store.js';
 
+export function quads_are_equal(a,b)
+{
+	return (a.s === b.s && a.p === b.p && a.o == b.o && a._id == b._id);
+}
+
+export function is_literal(x)
+{
+	return x.substring(0,1) == '"';
+}
+
 export function stringify_my_node(x)
 	{
 		if (typeof x === 'string' || x instanceof String)

@@ -1,36 +1,44 @@
 import {get, derived, writable} from 'svelte/store';
-import {assert} from './utils.js';
 import {log} from './log_store.js';
-import {bulkAddQuads} from './my_quadstore';
-import _, { map } from 'underscore';
+import _ from 'underscore';
 import {filter_quads_by_query} from './query.js';
+import {quads_are_equal} from './myrdf_io';
 
 export const quadstore = () =>
 {
-	let my_timeout;
-
-	/* let's not support multiple instances yet */
-	var db = new PouchDB('kittens');
-	//db.info(log);
 
 	// it's writable, but only from here. Users must call addQuad. So this quadstore would be better as an object implementing the readable store api + addQuad.
 	// oops, this really should be a dict not a list
 	let _writable = writable([]);
 
+	function drop()
+	{
+		busy.set(true);
+		db.destroy().then(function () {
+			busy.set(false);
+		}).catch(function (err) {
+		  alert(err);
+		})
+	}
+
+	/* let's not support multiple instances yet */
+	var db = new PouchDB('kittens');
+	//db.info(log);
+
 	let busy = writable(true);
 	let queries = writable([]);
 
+	let grab_all_quads__timeout;
+
 	function grab_all_quads()
 	{
-		if (my_timeout)
-			clearTimeout(my_timeout);
-		my_timeout = setTimeout(() =>
+		if (grab_all_quads__timeout) clearTimeout(grab_all_quads__timeout);
+		grab_all_quads__timeout = setTimeout(() =>
 		{
 			let query_tracker = {"ts": Date.now().toString()};
 			queries.update(queries => queries.concat(query_tracker));
 			db.allDocs({include_docs: true, descending: true}, function (err, doc)
 			{
-				queries.update(queries => _.without(queries, query_tracker));
 				if (err) alert(err);
 				//log("db.allDocs = ");
 				//log(doc);
@@ -44,13 +52,14 @@ export const quadstore = () =>
 				//log(quads);
 				try
 				{
-					log('_writable.set(quads);');
+					//log('_writable.set(quads);');
 					_writable.set(quads);
 				} catch (e)
 				{
 					alert(e)
 				}
 				busy.set(false);
+				queries.update(queries => _.without(queries, query_tracker));
 			});
 		}, 500);
 	}
@@ -65,10 +74,18 @@ export const quadstore = () =>
 
 	grab_all_quads();
 
-	let raw_query = (_query) => derived(_writable, quads =>
+	function raw_query(query_spec)
 	{
-		return filter_quads_by_query(_query, quads);
-	});
+		let current_result = undefined;
+		return derived(_writable, (quads, setter) =>
+		{
+			let new_result = filter_quads_by_query(query_spec, quads);
+			if (query_results_are_equal(new_result, current_result))
+				return;
+			current_result = new_result;
+			setter(new_result);
+		});
+	}
 
 	function bulkAddQuads(qs)
 	{
@@ -82,7 +99,6 @@ export const quadstore = () =>
 	}
 
 	let buffer = [];
-	let my_timeout2;
 
 	function flush_buffer()
 	{
@@ -91,12 +107,13 @@ export const quadstore = () =>
 		buffer = [];
 	}
 
+	let addQuads__timeout;
 	function addQuads(q)
 	{
 		buffer = buffer.concat(q);
-		if (my_timeout2)
-			clearTimeout(my_timeout2);
-		my_timeout2 = setTimeout(() => flush_buffer(), 300);
+		if (addQuads__timeout)
+			clearTimeout(addQuads__timeout);
+		addQuads__timeout = setTimeout(() => flush_buffer(), 300);
 	}
 
 	function addQuad(q)
@@ -137,7 +154,7 @@ export const quadstore = () =>
 
 	}
 
-	return {queries, raw_query, query2, addQuad, addQuads, bulkAddQuads, clear, busy};
+	return {queries, raw_query, query2, addQuad, addQuads, bulkAddQuads, clear,drop, busy};
 }
 
 
@@ -239,3 +256,27 @@ quadstore only implements subscribe for now.
 
 */
 
+
+/*
+
+multiple sources: for exapmle, one read-only,
+one rw. The rw one is where we would also store what quads are currently used up
+
+
+
+*/
+
+
+function query_results_are_equal(a, b)
+{
+	if (a === undefined)
+		return (b === undefined);
+	if (b === undefined)
+		return false;
+	if (a.length != b.length)
+		return false;
+	for (let i = 0; i < a.length; i++)
+		if (!quads_are_equal(a[i], b[i]))
+			return false;
+	return true;
+}

@@ -8,18 +8,16 @@
 			<li><a href="#/delogic">Delogic</a></li>
 			<li><a href="#/falcon">Falcon</a></li>
 			<li><a href="#/about">About</a></li>
+			<li><PageReloadClock/></li>
 		</ul>
 	</div>
 	<div class="row header">
 		<KbOps/>
 	</div>
-	<div class="row header">
-		<Minibuffer/>
-	</div>
 	<div class="row content">
 		<Router {routes}/>
 	</div>
-	<div class="row footer"><small>footsies</small></div>
+	<div class="row footer"><small><Minibuffer/></small></div>
 
 </div>
 
@@ -30,7 +28,9 @@
 />
 
 
+
 <script>
+	import {onMount, setContext} from 'svelte';
 	import {minibuffer_store} from './log_store.js';
 	import Router from 'svelte-spa-router';
 	import Home from './rHome.svelte'
@@ -42,12 +42,17 @@
 	import Log from './rLog.svelte';
 	import Falcon from './rFalcon.svelte';
 	import Name from './rName.svelte'
+	import Uri from './rUri.svelte'
 	import Delogic from './rDelogic.svelte'
 	import Wild from './rWild.svelte'
 	import NotFound from './rNotFound.svelte'
 	import About from './About.svelte'
 	import KbOps from './KbOps.svelte'
 	import Minibuffer from './Minibuffer.svelte'
+	import PageReloadClock from './PageReloadClock.svelte';
+
+	/*let handled_quads = {};
+	setContext('handled_quads', handled_quads);*/
 
 	let routes = {
 		'/': Home,
@@ -58,6 +63,7 @@
 		'/delogic': Delogic,
 		// ---
 		// Using named parameters, with last being optional
+		'/uri/:uri': Uri,
 		'/hello/:first/:last?': Name,
 		// Included twice to match both `/wild` (and nothing after) and `/wild/*` (with anything after)
 		'/wild': Wild,
@@ -77,6 +83,7 @@
 
 <style>
     :global(html, body) {
+		line-height: 1em;
         position: relative;
         width: 100%;
         height: 100%;
@@ -85,19 +92,33 @@
         padding: 0;
         color: #333;
         box-sizing: border-box;
+        max-width: 100%;
+		white-space: nowrap;
+		/*overflow: hidden;*/
+		text-overflow: ellipsis;
     }
 
     :global(.box) {
+		line-height: 1em;
+    	padding-left: 1em;
+    	padding-right: 1em;
         display: flex;
         flex-flow: column;
-        height: 100%;
+        margin: 0;
     }
+
+	:global(.btn) {
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		line-height: 1 !important;
+	}
 
     :global(.box .row) {
 		padding:0.2ex;
     }
 
     :global(.box .row.header) {
+
 		border-bottom: 1px dotted orange;
         flex: 0 1 auto;
         /* The above is shorthand for:

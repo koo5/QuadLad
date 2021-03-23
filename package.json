@@ -53,6 +53,7 @@
     "@types/n3": "^1.4.4",
     "@types/snowpack-env": "^2.3.2",
     "@web/test-runner": "^0.12.0",
+    "bootstrap": "^4.6.0",
     "chai": "^4.2.0",
     "postcss": "^8.2.6",
     "sass": "^1.32.8",

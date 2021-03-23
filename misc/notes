@@ -4,3 +4,9 @@ https://swi-prolog.discourse.group/t/ide-editor-for-swi-prolog/584/37
 https://github.com/edisonm/xtools/tree/master/prolog
 
 
+
+
+
+
+(?X).
+{ ?X rdf:first ?F; rdf:rest ?R } <= { ?R rdf:rest ?RR }.
