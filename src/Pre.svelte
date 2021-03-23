@@ -1,7 +1,7 @@
 <script>
-	export let x;
+
 </script>
-<pre>{JSON.stringify(x, null, 2)}</pre>
+<pre>{JSON.stringify($$props, null, 2)}</pre>
 <style>
     pre {
         margin: 3;

@@ -12,7 +12,7 @@
 	import GraphStyles from './CytoscapeGraphStyles.js'
 
 	import cola from 'cytoscape-cola';
-	import dagre from 'cytoscape-dagre'
+	//import dagre from 'cytoscape-dagre'
 	import klay from 'cytoscape-klay';
 	import coseBilkent from 'cytoscape-cose-bilkent';
 
@@ -25,7 +25,7 @@
 		log('cytoscape.use(...')
 		cytoscape.use(edgeConnections);
 		cytoscape.use(automove)
-		cytoscape.use(dagre)
+		//cytoscape.use(dagre)
 		cytoscape.use(klay)
 		cytoscape.use(coseBilkent);
 		cytoscape.use(cola);
@@ -33,6 +33,7 @@
 
 
 	export let source_query;
+	$: console.log($source_query);
 
 
 	let container = null

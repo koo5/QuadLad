@@ -10,6 +10,7 @@
 	import Pds from './Pds.svelte';
 	import {get, derived, writable} from 'svelte/store';
 	import UnhandledQuads from './UnhandledQuads.svelte';
+	import DelogicSlot from './DelogicSlot.svelte';
 
 	export let uri;
 
@@ -36,13 +37,16 @@
 		return xx?.[0];
 	})(v1);
 
-	$: presentation = ((type_quad_used) =>
+	$: rdf_type = type_quad_used?.o;
+
+	$: presentation = ((rdf_type) =>
 	{
-		let type = type_quad_used?.o;
-		if (type == 'delogic:node')
+		if (rdf_type == 'delogic:node')
 			return 'delogic:node';
+		if (rdf_type == 'delogic:slot')
+			return 'delogic:slot';
 		return "rkef:table_of_properties";
-	})(type_quad_used);
+	})(rdf_type);
 
 	function prop(uri, pred)
 	{
@@ -59,13 +63,15 @@
 <UsedQuad {type_quad_used}/>
 <div class="resource_display">
 	{#if all_quads.length != 0}
-		viewing <code>{uri}</code> as a {presentation}:<br/>
+		viewing <code>{uri}</code> (a {rdf_type}) as a {presentation}:<br/>
 
 		<!-- my domain specific views go here for now -->
 		{#if presentation == undefined}
 			presentation == undefined!
 		{:else if presentation == 'delogic:node'}
 			<DelogicNode {uri}/>
+		{:else if presentation == 'delogic:slot'}
+			<DelogicSlot {uri}/>
 		{:else if presentation == "robust:result"}
 			"robust:result"
 		{:else if presentation == "robust:document_set"}

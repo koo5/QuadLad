@@ -1,6 +1,6 @@
 <script>
 	import UsedQuad from './UsedQuad.svelte';
-	import {raw_query} from './my_quadstore';
+	import st from './my_quadstore';
 	import * as rdfio from "./myrdf_io.js";
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
 
@@ -8,8 +8,8 @@
 	let quad = result.quad;
 	let _id = quad._id;
 	let node = quad[result.position]
-	let quad_props = raw_query({s:result.quad._id})
-	let quad_rrops = raw_query({o:result.quad._id})
+	let quad_props = st.raw_query({s:result.quad._id})
+	let quad_rrops = st.raw_query({o:result.quad._id})
 	$: totlen = $quad_props.length + $quad_rrops.length;
 
 

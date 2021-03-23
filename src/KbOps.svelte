@@ -2,7 +2,7 @@
 
 	import {log} from './log_store.js';
   	import { Button, ButtonToolbar } from 'sveltestrap';
-	import {queries,addQuad,raw_query,kb,clear,busy} from './my_quadstore';
+	import {queries,addQuad,raw_query,kb,clear,drop,busy} from './my_quadstore';
 	import * as rdfio from './myrdf_io.js';
 
 	//$: log('kb has ' + $kb.length + ' items');
@@ -37,6 +37,7 @@
 
 <ButtonToolbar>
 	kb:
+	<Button outline color='danger' disabled={$busy} on:click='{() => drop()}'>Drop</Button>
 	<Button outline color='danger' disabled={$busy} on:click='{() => clear0()}'>Clear</Button>
 	<Button outline color='secondary' on:click='{() => load_quads()}'>Load</Button>
 	<Button outline primary on:click='{() => addDummyQuad()}'>Add random</Button>

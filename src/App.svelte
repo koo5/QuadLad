@@ -8,6 +8,7 @@
 			<li><a href="#/delogic">Delogic</a></li>
 			<li><a href="#/falcon">Falcon</a></li>
 			<li><a href="#/about">About</a></li>
+			<li><PageReloadClock/></li>
 		</ul>
 	</div>
 	<div class="row header">
@@ -29,7 +30,7 @@
 
 
 <script>
-	import { onMount, setContext } from 'svelte';
+	import {onMount, setContext} from 'svelte';
 	import {minibuffer_store} from './log_store.js';
 	import Router from 'svelte-spa-router';
 	import Home from './rHome.svelte'
@@ -48,6 +49,7 @@
 	import About from './About.svelte'
 	import KbOps from './KbOps.svelte'
 	import Minibuffer from './Minibuffer.svelte'
+	import PageReloadClock from './PageReloadClock.svelte';
 
 	/*let handled_quads = {};
 	setContext('handled_quads', handled_quads);*/

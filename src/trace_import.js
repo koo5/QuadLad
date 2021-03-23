@@ -46,12 +46,20 @@ export function f(data)
 	}
 	if (data['args'])
 	{
+		let args = data['args']
 		buffer.push({
 			s: id,
 			p: "delogic:args",
-			o: data['args'],
+			o: args,
 			g: '<idk#' + Date.now().toString() + '>'
 		});
+		args.forEach(arg =>
+			buffer.push({
+			s: arg,
+			p: "rdf:type",
+			o: "delogic:slot",
+			g: '<idk#' + Date.now().toString() + '>'
+		}));
 	}
 	addQuads(buffer); /* todo: addQuadsNoDupes */
 }
