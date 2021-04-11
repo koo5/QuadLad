@@ -35,6 +35,7 @@ export const quadstore = () =>
 		if (grab_all_quads__timeout) clearTimeout(grab_all_quads__timeout);
 		grab_all_quads__timeout = setTimeout(() =>
 		{
+			grab_all_quads__timeout = undefined;
 			let query_tracker = {"ts": Date.now().toString()};
 			queries.update(queries => queries.concat(query_tracker));
 			db.allDocs({include_docs: true, descending: true}, function (err, doc)
