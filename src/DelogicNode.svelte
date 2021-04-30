@@ -17,23 +17,29 @@
 
 </script>
 
-<UsedQuad {args_quad}/>
+<div>
 
-<div class="resource_display">
+	<details>
+		<summary>
+			{delogic_type}:
+		</summary>
+		delogic_type is: {delogic_type}
+	</details>
 
-	delogic_type is: {delogic_type}
 	<div>
 		{#if delogic_type == "control:tracer_invocation"}
 			args:
-			<ul>
+			<ol>
 				{#each args as arg}
 					<li>
 						<Outer uri={arg}/>
 					</li>
 				{/each}
-			</ul>
+			</ol>
 		{:else if delogic_type == "control:tracer_invocation"}
 
 		{/if}
 	</div>
+
+	dn<UsedQuad {args_quad}/>wtf
 </div>

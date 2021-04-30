@@ -60,10 +60,16 @@
 	}
 
 </script>
-<UsedQuad {type_quad_used}/>
 <div class="resource_display">
+
 	{#if all_quads.length != 0}
-		viewing <code>{uri}</code> (a {rdf_type}) as a {presentation}:<br/>
+		<details>
+			<summary>
+				<code>{uri}</code>
+			</summary>
+			viewing <code>{uri}</code> (a {rdf_type}) as a {presentation}:<br/>
+		</details>
+
 
 		<!-- my domain specific views go here for now -->
 		{#if presentation == undefined}
@@ -90,6 +96,7 @@
 	{:else}
 		we know nothing about <code>{label}</code> here.
 	{/if}
+	oo<UsedQuad {type_quad_used}/>
 
 </div>
 

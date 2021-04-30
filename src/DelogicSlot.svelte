@@ -12,6 +12,4 @@
 </script>
 
 <UsedQuad {child_quad}/>
-<div class="resource_display">
 	-> <Outer uri={child}/>
-</div>

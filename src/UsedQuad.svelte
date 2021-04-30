@@ -18,3 +18,5 @@
 	/* cleanup */
 	onDestroy(() => pop(_id));
 </script>
+
+uses:<pre>{JSON.stringify(x,null,' ')}</pre>
