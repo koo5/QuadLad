@@ -1,11 +1,14 @@
 <script>
 
+
+
 	/* Construct this component with (an arbitrarily-named) prop signifying the quad that's been used up by your domain-specific resource display. It will keep the handled_quads store up to date. */
 
-	import { onDestroy } from 'svelte';
-	import {add,pop} from './handled_quads';
+	import {onDestroy} from 'svelte';
+	import {add, pop} from './handled_quads';
+	import {settings} from './user';
 
-	/* grab the prop, no matter what name it was passed by. (Docs says this may be inefficient but whatever) */
+	/* grab the prop, no matter what name it was passed by. (Docs say this may be inefficient but whatever) */
 	$: x = Object.values($$props)[0];
 
 	/* if it's a whole quad, grab just the _id */
@@ -19,4 +22,6 @@
 	onDestroy(() => pop(_id));
 </script>
 
-uses:<pre>{JSON.stringify(x,null,' ')}</pre>
+{#if _id && $settings.used_quads}
+	<span class="debug">UsedQuad:<pre>{JSON.stringify(x, null, ' ')}</pre></span>
+{/if}

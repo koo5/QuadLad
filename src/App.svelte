@@ -8,7 +8,11 @@
 			<li><a href="#/delogic">Delogic</a></li>
 			<li><a href="#/falcon">Falcon</a></li>
 			<li><a href="#/about">About</a></li>
-			<li><PageReloadClock/></li>
+		</ul>
+		debug:
+		<ul>
+			<li>clock:<PageReloadClock/></li>
+			<li><label><input type="checkbox" bind:checked={$settings.used_quads}/>used_quads</label></li>
 		</ul>
 	</div>
 	<div class="row header">
@@ -30,6 +34,7 @@
 
 
 <script>
+	import {settings} from './user';
 	import {onMount, setContext} from 'svelte';
 	import {minibuffer_store} from './log_store.js';
 	import Router from 'svelte-spa-router';
@@ -135,6 +140,13 @@
     :global(.box .row.footer) {
         flex: 0 1;
         padding: 0;
+    }
+
+    :global(.debug) {
+        background: #dddddd;
+		border: 1px dotted blue;
+        color: #222;
+
     }
 
 

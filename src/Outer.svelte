@@ -96,7 +96,7 @@
 	{:else}
 		we know nothing about <code>{label}</code> here.
 	{/if}
-	oo<UsedQuad {type_quad_used}/>
+	<UsedQuad {type_quad_used}/>
 
 </div>
 

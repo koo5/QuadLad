@@ -80,7 +80,7 @@
 	<td>
 		<button title="logQuad" on:click={logQuad}>logQuad</button>
 		<button title="changeQuad" on:click={changeQuad}>changeQuad</button>
-			<button on:click={talkAboutThisTriple}>talk about this triple</button>&nbsp;<svelte:component this={Popover} overlayColor=#ffffff90>
+			<button on:click={talkAboutThisTriple}>mention</button>&nbsp;<svelte:component this={Popover} overlayColor=#ffffff90>
 				<span slot=target>
 					<SvelteTooltip tip="why would i want to do that?" bottom>
 						<a href="#">?</a>
