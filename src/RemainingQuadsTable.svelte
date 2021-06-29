@@ -25,7 +25,7 @@
 	</tr>
 	</thead>
 	<tbody>
-		{#each quads as quad (quad.idx)}
+		{#each quads as quad}
 			<tr>
 				<th scope="row">{quad.idx}</th>
 				<td>{node_str(quad.s)}</td>

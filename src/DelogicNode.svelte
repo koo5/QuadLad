@@ -27,17 +27,37 @@
 	<div>
 		{#if delogic_type == "control:tracer_invocation"}
 			trace:
-				<Outer uri={args[0]}/>
+			<Outer uri={args[0]}/>
 		{:else if delogic_type == "proof:true"}
 			true.
 		{:else if delogic_type == "proof:conjunction"}
-			%%:<ul>
-			{#each args as arg}
-				<li>
-					<Outer uri={arg}/>
-				</li>
-			{/each}
-		</ul>
+			<details>
+				<summary>
+					and:
+				</summary>
+				{args}
+
+					{#each args as arg (arg)}
+						<li>
+							<Outer uri={arg}/>
+						</li>
+					{/each}
+
+				<ul>
+				</ul>
+			</details>
+		{:else if delogic_type == "proof:ifthenelse"}
+			<details>
+				<summary>
+					-> ;
+				</summary>
+				condition:
+				<Outer uri={args[0]}/>
+				then:
+				<Outer uri={args[1]}/>
+				else:
+				<Outer uri={args[2]}/>
+			</details>
 		{/if}
 	</div>
 
