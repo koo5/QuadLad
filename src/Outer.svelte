@@ -1,4 +1,5 @@
 <script>
+	import {settings} from './user';
 	import UsedQuad from './UsedQuad.svelte';
 	import {log} from './log_store.js';
 	import RemainingQuadsTable from './RemainingQuadsTable.svelte';
@@ -63,12 +64,9 @@
 <div class="resource_display">
 
 	{#if all_quads.length != 0}
-		<details>
-			<summary>
-				<code>{uri}</code>
-			</summary>
-			viewing <code>{uri}</code> (a {rdf_type}) as a {presentation}:<br/>
-		</details>
+		{#if $settings.type}
+			viewing <code>{uri}</code> (a {rdf_type}) as a <code>{presentation}</code>:<br/>
+		{/if}
 
 
 		<!-- my domain specific views go here for now -->

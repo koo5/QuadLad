@@ -9,12 +9,8 @@
 			<li><a href="#/falcon">Falcon</a></li>
 			<li><a href="#/about">About</a></li>
 		</ul>
-		debug:
-		<ul>
-			<li>clock:<PageReloadClock/></li>
-			<li><label><input type="checkbox" bind:checked={$settings.used_quads}/>used_quads</label></li>
-		</ul>
 	</div>
+	<Dbg/>
 	<div class="row header">
 		<KbOps/>
 	</div>
@@ -40,6 +36,7 @@
 	import Router from 'svelte-spa-router';
 	import Home from './rHome.svelte'
 	import Raw from './Raw.svelte'
+	import Dbg from './Dbg.svelte'
 	import QuadTable from './QuadTable.svelte'
 	import Cytoscape from './rCytoscape.svelte'
 	//import TextEditor from './rTextEditor.svelte';
@@ -54,7 +51,6 @@
 	import About from './About.svelte'
 	import KbOps from './KbOps.svelte'
 	import Minibuffer from './Minibuffer.svelte'
-	import PageReloadClock from './PageReloadClock.svelte';
 
 	/*let handled_quads = {};
 	setContext('handled_quads', handled_quads);*/

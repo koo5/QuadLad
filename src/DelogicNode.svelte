@@ -1,4 +1,5 @@
 <script>
+	import {settings} from './user';
 	import Outer from './Outer.svelte';
 	import UsedQuad from './UsedQuad.svelte';
 	import st from './my_quadstore';
@@ -19,27 +20,26 @@
 
 <div>
 
-	<details>
-		<summary>
-			{delogic_type}:
-		</summary>
+	{#if $settings.type}
 		delogic_type is: {delogic_type}
-	</details>
+	{/if}
 
 	<div>
 		{#if delogic_type == "control:tracer_invocation"}
-			args:
-			<ol>
-				{#each args as arg}
-					<li>
-						<Outer uri={arg}/>
-					</li>
-				{/each}
-			</ol>
-		{:else if delogic_type == "control:tracer_invocation"}
-
+			trace:
+				<Outer uri={args[0]}/>
+		{:else if delogic_type == "proof:true"}
+			true.
+		{:else if delogic_type == "proof:conjunction"}
+			%%:<ul>
+			{#each args as arg}
+				<li>
+					<Outer uri={arg}/>
+				</li>
+			{/each}
+		</ul>
 		{/if}
 	</div>
 
-	dn<UsedQuad {args_quad}/>wtf
+	<UsedQuad {args_quad}/>
 </div>

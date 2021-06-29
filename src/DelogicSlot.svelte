@@ -12,4 +12,4 @@
 </script>
 
 <UsedQuad {child_quad}/>
-	-> <Outer uri={child}/>
+	<Outer uri={child}/>
