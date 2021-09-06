@@ -36,14 +36,12 @@
 					and:
 				</summary>
 				{args}
-
+				<ul>
 					{#each args as arg (arg)}
 						<li>
 							<Outer uri={arg}/>
 						</li>
 					{/each}
-
-				<ul>
 				</ul>
 			</details>
 		{:else if delogic_type == "proof:ifthenelse"}
@@ -58,7 +56,19 @@
 				else:
 				<Outer uri={args[2]}/>
 			</details>
+		{:else}
+			{delogic_type}:
+
+				<ul>
+					{#each args as arg}
+						<li>
+							<Outer uri={arg}/>
+						</li>
+					{/each}
+				</ul>
+
 		{/if}
+
 	</div>
 
 	<UsedQuad {args_quad}/>

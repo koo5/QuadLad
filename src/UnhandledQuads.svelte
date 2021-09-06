@@ -14,6 +14,7 @@
 
 	/* find those not used by any domain-specific view component */
 	$: unhandled_quads = find_unhandled_quads(all_quads, $handled_quads)
+
 	function find_unhandled_quads(all_quads, handled_quads)
 	{
 		//console.log(JSON.stringify(all_quads,null,2))
@@ -34,7 +35,18 @@
 
 
 {#if unhandled_quads.length}
-	<sup><small>({unhandled_quads.length} unhandled quads about {uri})</small></sup>
-	<RemainingQuadsTable quads={unhandled_quads}/>
+	<details>
+
+			<summary>
+			<small>
+			<i>
+			({unhandled_quads.length} unhandled quads about {uri})
+			</i>
+			</small>
+
+			</summary>
+
+		<RemainingQuadsTable quads={unhandled_quads}/>
+	</details>
 {/if}
 
