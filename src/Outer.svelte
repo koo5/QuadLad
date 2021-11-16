@@ -13,6 +13,10 @@
 	let span;
 
 
+	/*
+	attempt to keep track of what resources are already displayed somewhere (and thus should probably be just referenced from then on).
+	 */
+
 	$: maybe_display(uri, span);
 	function maybe_display(uri,span)
 	{

@@ -29,6 +29,9 @@
 	$: remaining_quads_len = remaining_quads.length;
 	$: label = uri;
 
+	/*
+	you'll notice this patter everywhere - i'm querying for "<resource> rdf:type <type>", but i'm not only interested in <type>, but in the quad that asserts it. This allows me to check that quad off as "used", and to possibly display multiple representations of the resource, one for each rdf:type asserted..
+	 */
 	$: type_quad_used = ((v1) =>
 	{
 		//if (presentation_selection_strategy == "rkef:automatic")
