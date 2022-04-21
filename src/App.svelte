@@ -134,6 +134,7 @@
     }
 
     :global(.box .row.footer) {
+    border-top: 1px dotted orange;
         flex: 0 1;
         padding: 0;
     }
