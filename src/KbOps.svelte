@@ -4,6 +4,7 @@
   	import { Button, ButtonToolbar } from 'sveltestrap';
 	import {queries,addQuad,raw_query,kb,clear,drop,busy} from './my_quadstore';
 	import * as rdfio from './myrdf_io.js';
+	import PouchDB from 'pouchdb';
 
 	//$: log('kb has ' + $kb.length + ' items');
 

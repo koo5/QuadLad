@@ -1,4 +1,4 @@
-<div class="box">
+<div class="app">
 	<div class="row header">
 		<ul>
 			<li><a href="#/">Home</a></li>
@@ -14,7 +14,7 @@
 	<div class="row header">
 		<KbOps/>
 	</div>
-	<div class="row content">
+	<div class="box">
 		<Router {routes}/>
 	</div>
 	<div class="row footer"><small><Minibuffer/></small></div>
@@ -83,30 +83,34 @@
 
 
 <style>
-    :global(html, body) {
-		line-height: 1em;
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background: #eeeeff;
-        margin: 0;
-        padding: 0;
-        color: #333;
-        box-sizing: border-box;
-        max-width: 100%;
-		white-space: nowrap;
-		/*overflow: hidden;*/
-		text-overflow: ellipsis;
-    }
 
-    :global(.box) {
-		line-height: 1em;
-    	padding-left: 1em;
-    	padding-right: 1em;
-        display: flex;
-        flex-flow: column;
-        margin: 0;
-    }
+	.app {
+  line-height: 1em;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #eeeeff;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  box-sizing: border-box;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; /* Prevent double scrollbars */
+}
+
+.box {
+	line-height: 1em;
+	padding-left: 1em;
+	padding-right: 1em;
+	display: flex;
+	flex-flow: column;
+	margin: 0;
+	height: 100%; /* Ensure the box takes full height */
+  flex: 1 1 auto;
+  overflow: auto; /* Ensure content row can scroll */
+}
 
 	:global(.btn) {
 		padding-top: 0px !important;
@@ -127,10 +131,6 @@
 		flex-shrink: 1,
 		flex-basis: auto
 		*/
-    }
-
-    :global(.box .row.content) {
-        flex: 1 1 auto;
     }
 
     :global(.box .row.footer) {

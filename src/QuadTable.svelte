@@ -12,6 +12,7 @@
 	{/if}
 
 	<table>
+		<thead>
 		<tr>
 			<th>idx</th>
 			<th></th>
@@ -21,6 +22,7 @@
 			<th>graph</th>
 			<th></th>
 		</tr>
+		</thead>
 		{#each $quads as item}
 			<tr>
 			<QuadsListItem quad={item}/>

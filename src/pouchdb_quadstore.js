@@ -3,6 +3,7 @@ import {log} from './log_store.js';
 import _ from 'underscore';
 import {filter_quads_by_query} from './query.js';
 import {quads_are_equal} from './myrdf_io';
+import PouchDB from 'pouchdb';
 
 export const quadstore = () =>
 {

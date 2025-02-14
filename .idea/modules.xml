@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/app-template-svelte-typescript.iml" filepath="$PROJECT_DIR$/.idea/app-template-svelte-typescript.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/QuadLad.iml" filepath="$PROJECT_DIR$/.idea/QuadLad.iml" />
     </modules>
   </component>
 </project>
